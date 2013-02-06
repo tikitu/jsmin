@@ -2,7 +2,7 @@ Metadata-Version: 1.0
 Name: jsmin
 Version: 2.0.2
 Summary: JavaScript minifier.
-Home-page: UNKNOWN
+Home-page: https://bitbucket.org/dcs/jsmin
 Author: Dave St.Germain
 Author-email: dave@st.germa.in
 License: UNKNOWN
