@@ -115,7 +115,7 @@ class JavascriptMinify(object):
             return
 
         while 1:
-            next2 = read(1)
+            next2 = read(1)  
             if not next2:
                 last = next1.strip()
                 if not (doing_single_comment or doing_multi_comment)\
@@ -167,7 +167,7 @@ class JavascriptMinify(object):
                     and (next2 in space_strings or next2 > '~'):
                     do_space = True
             elif next1 == '/':
-                if (previous in ';\n\r{}' or previous < '!') and next2 in '/*':
+                if (previous in ';,\n\r{}' or previous < '!') and next2 in '/*':
                     if next2 == '/':
                         doing_single_comment = True
                         previous_before_comment = previous_non_space

@@ -226,7 +226,11 @@ var  foo    =  "hey";
 
     def testCommentBeforeEOF(self):
         self.assertMinified("//test\r\n", "")
-
+    
+    def testCommentInObj(self):
+        self.assertMinified("""{ 
+            a: 1,//comment
+            }""", "{a:1,}")
 
 if __name__ == '__main__':
     unittest.main()
