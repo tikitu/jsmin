@@ -129,7 +129,7 @@ class JavascriptMinify(object):
             elif doing_single_comment:
                 if next1 in '\r\n':
                     doing_single_comment = False
-                    while next2 in '\r\n':
+                    while next2 in ['\r', '\n']:
                         next2 = read(1)
                     if previous_before_comment in ')}]':
                         do_newline = True

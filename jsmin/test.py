@@ -224,6 +224,9 @@ var  foo    =  "hey";
         output = jsmin.jsmin(instr)
         self.assertEqual(output, expected)
 
+    def testCommentBeforeEOF(self):
+        self.assertMinified("//test\r\n", "")
+
 
 if __name__ == '__main__':
     unittest.main()
