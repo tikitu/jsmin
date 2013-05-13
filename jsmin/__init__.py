@@ -135,6 +135,8 @@ class JavascriptMinify(object):
                             break
                     if previous_before_comment in ')}]':
                         do_newline = True
+                    elif previous_before_comment in space_strings:
+                        write('\n')
             elif in_quote:
                 quote_buf.append(next1)
 
@@ -167,17 +169,17 @@ class JavascriptMinify(object):
                     and (next2 in space_strings or next2 > '~'):
                     do_space = True
             elif next1 == '/':
-                if (previous in ';,\n\r{}' or previous < '!') and next2 in '/*':
-                    if next2 == '/':
-                        doing_single_comment = True
-                        previous_before_comment = previous_non_space
-                    elif next2 == '*':
-                        doing_multi_comment = True
+                if in_re:
+                    if previous != '\\':
+                        in_re = False
+                    write('/')
+                elif next2 == '/':
+                    doing_single_comment = True
+                    previous_before_comment = previous_non_space
+                elif next2 == '*':
+                    doing_multi_comment = True
                 else:
-                    if not in_re:
-                        in_re = previous_non_space in '(,=:[?!&|'
-                    elif previous_non_space != '\\':
-                        in_re = not in_re
+                    in_re = previous_non_space in '(,=:[?!&|'
                     write('/')
             else:
                 if do_space:

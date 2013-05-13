@@ -232,5 +232,21 @@ var  foo    =  "hey";
             a: 1,//comment
             }""", "{a:1,}")
 
+    def testCommentInObj2(self):
+        self.assertMinified("{a: 1//comment\r\n}", "{a:1\n}")
+
+    def testImplicitSemicolon(self):
+        # return \n 1  is equivalent with   return; 1
+        # so best make sure jsmin retains the newline
+        self.assertMinified("return;//comment\r\na", "return;a")
+
+    def testImplicitSemicolon2(self):
+        self.assertMinified("return//comment...\r\na", "return\na")
+    
+    def testSingleComment2(self):
+        self.assertMinified('x.replace(/\//, "_")// slash to underscore',
+                'x.replace(/\//,"_")')
+
+
 if __name__ == '__main__':
     unittest.main()
