@@ -17,6 +17,7 @@ setup(
     author='Dave St.Germain',
     author_email='dave@st.germa.in',
     test_suite='jsmin.test.JsTests',
+    license='MIT License',
     url='https://bitbucket.org/dcs/jsmin/',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
