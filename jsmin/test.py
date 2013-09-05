@@ -123,7 +123,7 @@ another thing;"""
           hoverclass:   options.hoverclass
         }
 
-        // fix for gecko engine
+        // fix for gecko engine   
         Element.cleanWhitespace(element); 
         """
         expected = r"""var options_for_droppable={overlap:options.overlap,containment:options.containment,tree:options.tree,hoverclass:options.hoverclass,onHover:Sortable.onHover}
@@ -152,7 +152,21 @@ Element.cleanWhitespace(element);"""
         """
         expected = r"""inspect:function(useDoubleQuotes){var escapedString=this.gsub(/[\x00-\x1f\\]/,function(match){var character=String.specialChar[match[0]];return character?character:'\\u00'+match[0].charCodeAt().toPaddedString(2,16);});if(useDoubleQuotes)return'"'+escapedString.replace(/"/g,'\\"')+'"';return"'"+escapedString.replace(/'/g,'\\\'')+"'";},toJSON:function(){return this.inspect(true);},unfilterJSON:function(filter){return this.sub(filter||Prototype.JSONFilter,'#{1}');},"""
         self.assertMinified(js, expected)
-
+    
+    def testLiteralRe(self):
+        js = r"""
+        myString.replace(/\\/g, '/');
+        console.log("hi");
+        """
+        expected = r"""myString.replace(/\\/g,'/');console.log("hi");"""
+        self.assertMinified(js, expected)
+        
+        js = r'''return /^data:image\//i.test(url) || 
+        /^(https?|ftp|file|about|chrome|resource):/.test(url);
+        '''
+        expected = r'''return /^data:image\//i.test(url)||/^(https?|ftp|file|about|chrome|resource):/.test(url);'''
+        self.assertMinified(js, expected)
+        
     def testNoBracesWithComment(self):
         js = r"""
         onSuccess: function(transport) {
