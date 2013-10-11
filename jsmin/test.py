@@ -266,7 +266,7 @@ var  foo    =  "hey";
         { a: 1 / 2, }
         // comment
         '''
-        expected = '''{a:1/ 2,}'''
+        expected = '''{a:1/2,}'''
         self.assertMinified(original, expected)
 
 

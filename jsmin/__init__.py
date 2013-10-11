@@ -159,14 +159,14 @@ class JavascriptMinify(object):
                                 or next2 > '~' or next2 == '/':
                                 do_newline = True
                             break
-            elif next1 < '!' and not in_re:                
+            elif next1 < '!' and not in_re:
                 if (previous_non_space in space_strings \
                     or previous_non_space > '~') \
                     and (next2 in space_strings or next2 > '~'):
                     do_space = True
-                elif previous == 'n' and next2 == '/':
+                elif previous_non_space == 'n' and next2 == '/':
                     # returning a regex...
-                    write(' ')                              
+                    write(' ')
             elif next1 == '/':
                 if do_space:
                     write(' ')
@@ -174,13 +174,13 @@ class JavascriptMinify(object):
                     if previous != '\\' or next2 in 'gimy':
                         in_re = False
                     write('/')
-                elif next2 == '/':
+                elif next2 == '/':                    
                     doing_single_comment = True
                     previous_before_comment = previous_non_space
                 elif next2 == '*':
                     doing_multi_comment = True
                 else:
-                    in_re = previous in '(,=:[?!&| '
+                    in_re = previous_non_space in '(,=:[?!&|n' # literal regular expression
                     write('/')
             else:
                 if do_space:
