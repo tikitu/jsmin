@@ -261,6 +261,14 @@ var  foo    =  "hey";
         self.assertMinified('x.replace(/\//, "_")// slash to underscore',
                 'x.replace(/\//,"_")')
 
+    def testSlashesNearComments(self):
+        original = '''
+        { a: 1 / 2, }
+        // comment
+        '''
+        expected = '''{a:1/ 2,}'''
+        self.assertMinified(original, expected)
+
 
 if __name__ == '__main__':
     unittest.main()
