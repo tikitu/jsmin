@@ -37,7 +37,7 @@ else:
 
 
 __all__ = ['jsmin', 'JavascriptMinify']
-__version__ = '2.0.5'
+__version__ = '2.0.6'
 
 
 def jsmin(js):
@@ -72,7 +72,20 @@ class JavascriptMinify(object):
     def minify(self, instream=None, outstream=None):
         if instream and outstream:
             self.ins, self.outs = instream, outstream
-        write = self.outs.write
+        
+        self.is_return = False
+        self.return_buf = ''
+        
+        def write(char):
+            # all of this is to support literal regular expressions.
+            # sigh
+            if char in 'return':
+                self.return_buf += char
+                self.is_return = self.return_buf == 'return'
+            self.outs.write(char)
+            if self.is_return:
+                self.return_buf = ''
+
         read = self.ins.read
 
         space_strings = "abcdefghijklmnopqrstuvwxyz"\
@@ -88,7 +101,7 @@ class JavascriptMinify(object):
         in_re = False
         in_quote = ''
         quote_buf = []
-
+        
         previous = read(1)
         next1 = read(1)
         if previous == '/':
@@ -164,7 +177,7 @@ class JavascriptMinify(object):
                     or previous_non_space > '~') \
                     and (next2 in space_strings or next2 > '~'):
                     do_space = True
-                elif previous_non_space == 'n' and next2 == '/':
+                elif self.is_return and next2 == '/':
                     # returning a regex...
                     write(' ')
             elif next1 == '/':
@@ -180,7 +193,7 @@ class JavascriptMinify(object):
                 elif next2 == '*':
                     doing_multi_comment = True
                 else:
-                    in_re = previous_non_space in '(,=:[?!&|n' # literal regular expression
+                    in_re = previous_non_space in '(,=:[?!&|' or self.is_return # literal regular expression
                     write('/')
             else:
                 if do_space:
@@ -189,12 +202,16 @@ class JavascriptMinify(object):
                 if do_newline:
                     write('\n')
                     do_newline = False
+                    
                 write(next1)
                 if not in_re and next1 in "'\"":
                     in_quote = next1
                     quote_buf = []
+
             previous = next1
             next1 = next2
 
             if previous >= '!':
                 previous_non_space = previous
+
+                

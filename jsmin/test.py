@@ -161,7 +161,7 @@ Element.cleanWhitespace(element);"""
         expected = r"""myString.replace(/\\/g,'/');console.log("hi");"""
         self.assertMinified(js, expected)
         
-        js = r'''return /^data:image\//i.test(url) || 
+        js = r''' return /^data:image\//i.test(url) || 
         /^(https?|ftp|file|about|chrome|resource):/.test(url);
         '''
         expected = r'''return /^data:image\//i.test(url)||/^(https?|ftp|file|about|chrome|resource):/.test(url);'''
@@ -263,12 +263,18 @@ var  foo    =  "hey";
 
     def testSlashesNearComments(self):
         original = '''
-        { a: 1 / 2, }
+        { a: n / 2, }
         // comment
         '''
-        expected = '''{a:1/2,}'''
+        expected = '''{a:n/2,}'''
         self.assertMinified(original, expected)
-
+    
+    def testReturn(self):
+        original = '''
+        return foo;//comment
+        return bar;'''
+        expected = 'return foo; return bar;'
+        self.assertMinified(original, expected)
 
 if __name__ == '__main__':
     unittest.main()
