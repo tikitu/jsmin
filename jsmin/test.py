@@ -94,6 +94,15 @@ another thing;"""
         """
         expected = r"""function foo(){alert('crud');}"""
         self.assertMinified(js, expected)
+
+    def testBlockCommentStartingWithSlash(self):
+        self.assertMinified('/*/ comment */ A', 'A')
+
+    def testEmptyBlockComment(self):
+        self.assertMinified('/* A */ B', 'B')
+
+    def testBlockCommentMultipleOpen(self):
+        self.assertMinified('/* A /* B */ C', 'C')
         
     def testJustAComment(self):
         self.assertMinified('     // a comment', '')

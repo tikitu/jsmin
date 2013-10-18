@@ -132,7 +132,7 @@ class JavascriptMinify(object):
                     write(last)
                 break
             if doing_multi_comment:
-                if next1 == '*' and next2 == '/':
+                if next1 == '*' and next2 == '/' and not previous == '/':
                     doing_multi_comment = False
                     next2 = read(1)
             elif doing_single_comment:
@@ -214,4 +214,3 @@ class JavascriptMinify(object):
             if previous >= '!':
                 previous_non_space = previous
 
-                
