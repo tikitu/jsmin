@@ -30,3 +30,4 @@ Contributors (cronological commit order)
 * Dave St.Germain (original author)
 * hansweltar
 * `Tikitu de Jager <mailto:tikitu+jsmin@logophile.org>`_ (current maintainer)
+* https://bitbucket.org/rennat
