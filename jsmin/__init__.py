@@ -37,7 +37,7 @@ else:
 
 
 __all__ = ['jsmin', 'JavascriptMinify']
-__version__ = '2.0.6'
+__version__ = '2.0.7'
 
 
 def jsmin(js):
@@ -109,6 +109,8 @@ class JavascriptMinify(object):
                 doing_single_comment = True
             elif next1 == '*':
                 doing_multi_comment = True
+                previous = next1
+                next1 = read(1)
             else:
                 write(previous)
         elif not previous:
@@ -124,7 +126,7 @@ class JavascriptMinify(object):
             return
 
         while 1:
-            next2 = read(1)  
+            next2 = read(1)
             if not next2:
                 last = next1.strip()
                 if not (doing_single_comment or doing_multi_comment)\
@@ -192,6 +194,9 @@ class JavascriptMinify(object):
                     previous_before_comment = previous_non_space
                 elif next2 == '*':
                     doing_multi_comment = True
+                    previous = next1
+                    next1 = next2
+                    next2 = read(1)
                 else:
                     in_re = previous_non_space in '(,=:[?!&|' or self.is_return # literal regular expression
                     write('/')
@@ -214,4 +219,3 @@ class JavascriptMinify(object):
             if previous >= '!':
                 previous_non_space = previous
 
-                

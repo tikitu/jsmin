@@ -3,3 +3,7 @@ syntax: glob
 build/
 dist/
 jsmin.egg-info
+local/
+lib/
+bin/
+include/
