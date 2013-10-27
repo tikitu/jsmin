@@ -11,18 +11,36 @@ Where to get it
 * get the latest release `from the stable branch on bitbucket <https://bitbucket.org/dcs/jsmin/branch/stable>`_
 * get the development version `from the default branch on bitbucket <https://bitbucket.org/dcs/jsmin/branch/default>`_
 
+Contributing
+============
+
+`Issues <https://bitbucket.org/dcs/jsmin/issues>`_ and `Pull requests <https://bitbucket.org/dcs/jsmin/pull-requests>`_
+will be gratefully received on Bitbucket.
+
+If possible, please make separate pull requests for tests and for code: tests will be committed on the stable branch
+(which tracks the latest released version) while code will go to default by, erm, default.
+
+By default your Bitbucket identity will be added to the contributor's list below; if you prefer a different name feel
+free to add it in your pull request instead. (If you prefer not to be mentioned you'll have to let the maintainer know
+somehow.)
+
 Build/test status
 =================
 
-New tests are committed first to stable, which is tested against CPython 2.7.
+Stable (latest released version plus any new tests) is tested against CPython 2.7.
 Currently:
 
 .. image:: https://jenkins.shiningpanda-ci.com/buzzcapture/job/jsmin-stable/badge/icon
 
-New code gets developed on the default branch and tested against CPython 2.6, 2.7, 3.2 and 3.3.
-Currently:
+If stable is failing that means there's a new test that fails on *the latest released version on pypi*, with no fix yet
+released.
+
+Default (development version, might be ahead of latest released version) is tested against CPython 2.6, 2.7, 3.2 and
+3.3. Currently:
 
 .. image:: https://jenkins.shiningpanda-ci.com/buzzcapture/job/jsmin-dev/badge/icon
+
+If default is failing don't use it, but as long as stable is passing the pypi release is ok.
 
 Contributors (cronological commit order)
 ========================================
