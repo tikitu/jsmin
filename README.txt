@@ -28,6 +28,6 @@ Contributors (cronological commit order)
 ========================================
 
 * Dave St.Germain (original author)
-* hansweltar
+* `Hans weltar <https://bitbucket.org/hansweltar>`_
 * `Tikitu de Jager <mailto:tikitu+jsmin@logophile.org>`_ (current maintainer)
 * https://bitbucket.org/rennat
