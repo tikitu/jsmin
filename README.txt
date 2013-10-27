@@ -45,7 +45,7 @@ If default is failing don't use it, but as long as stable is passing the pypi re
 Contributors (cronological commit order)
 ========================================
 
-* Dave St.Germain (original author)
+* `Dave St.Germain <https://bitbucket.org/dcs>`_ (original author)
 * `Hans weltar <https://bitbucket.org/hansweltar>`_
 * `Tikitu de Jager <mailto:tikitu+jsmin@logophile.org>`_ (current maintainer)
 * https://bitbucket.org/rennat
