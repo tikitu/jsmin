@@ -312,5 +312,10 @@ var  foo    =  "hey";
         expected = 'return foo; return bar;'
         self.assertMinified(original, expected)
 
+    def test_space_plus(self):
+        original = '"s" + ++e + "s"'
+        expected = '"s"+ ++e+"s"'
+        self.assertMinified(original, expected)
+
 if __name__ == '__main__':
     unittest.main()
