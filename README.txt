@@ -27,20 +27,20 @@ somehow.)
 Build/test status
 =================
 
-Stable (latest released version plus any new tests) is tested against CPython 2.7.
+Stable (latest released version plus any new tests) is tested against CPython 2.6, 2.7, 3.2, and 3.3.
 Currently:
 
-.. image:: https://jenkins.shiningpanda-ci.com/buzzcapture/job/jsmin-stable/badge/icon
+.. image:: https://travis-ci.org/tikitu/jsmin.png?branch=ghstable
 
 If stable is failing that means there's a new test that fails on *the latest released version on pypi*, with no fix yet
 released.
 
-Default (development version, might be ahead of latest released version) is tested against CPython 2.6, 2.7, 3.2 and
+Default (development version, might be ahead of latest released version) is tested against CPython 2.6, 2.7, 3.2, and
 3.3. Currently:
 
-.. image:: https://jenkins.shiningpanda-ci.com/buzzcapture/job/jsmin-dev/badge/icon
+.. image:: https://travis-ci.org/tikitu/jsmin.png?branch=master
 
-If default is failing don't use it, but as long as stable is passing the pypi release is ok.
+If default is failing don't use it, but as long as stable is passing the pypi release should be ok.
 
 Contributors (cronological commit order)
 ========================================
