@@ -317,5 +317,10 @@ var  foo    =  "hey";
         expected = '"s"+ ++e+"s"'
         self.assertMinified(original, expected)
 
+    def test_no_final_newline(self):
+        original = '"s"'
+        expected = '"s"'
+        self.assertMinified(original, expected)
+
 if __name__ == '__main__':
     unittest.main()
