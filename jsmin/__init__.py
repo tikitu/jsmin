@@ -131,6 +131,8 @@ class JavascriptMinify(object):
                 last = next1.strip()
                 if not (doing_single_comment or doing_multi_comment)\
                     and last not in ('', '/'):
+                    if in_quote:
+                        write(''.join(quote_buf))
                     write(last)
                 break
             if doing_multi_comment:
