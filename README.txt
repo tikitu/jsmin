@@ -59,7 +59,7 @@ Default (development version, might be ahead of latest released version) is test
 If default is failing don't use it, but as long as stable is passing the pypi release should be ok.
 
 Contributors (chronological commit order)
-========================================
+=========================================
 
 * `Dave St.Germain <https://bitbucket.org/dcs>`_ (original author)
 * `Hans weltar <https://bitbucket.org/hansweltar>`_
