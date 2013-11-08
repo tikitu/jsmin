@@ -4,6 +4,19 @@ jsmin
 
 JavaScript minifier.
 
+Usage
+=====
+
+.. code:: python
+
+ from jsmin import jsmin
+ with open('myfile.js') as js_file:
+     minified = jsmin(js_file.read())
+
+You can run it as a commandline tool also::
+
+  python -m jsmin myfile.js
+
 Where to get it
 ===============
 
@@ -15,14 +28,15 @@ Contributing
 ============
 
 `Issues <https://bitbucket.org/dcs/jsmin/issues>`_ and `Pull requests <https://bitbucket.org/dcs/jsmin/pull-requests>`_
-will be gratefully received on Bitbucket.
+will be gratefully received on Bitbucket. Pull requests on github are great too, but the issue tracker lives on
+bitbucket.
 
 If possible, please make separate pull requests for tests and for code: tests will be committed on the stable branch
 (which tracks the latest released version) while code will go to default by, erm, default.
 
-By default your Bitbucket identity will be added to the contributor's list below; if you prefer a different name feel
-free to add it in your pull request instead. (If you prefer not to be mentioned you'll have to let the maintainer know
-somehow.)
+Unless you request otherwise, your Bitbucket identity will be added to the contributor's list below; if you prefer a
+different name feel free to add it in your pull request instead. (If you prefer not to be mentioned you'll have to let
+the maintainer know somehow.)
 
 Build/test status
 =================
@@ -42,7 +56,7 @@ Default (development version, might be ahead of latest released version) is test
 
 If default is failing don't use it, but as long as stable is passing the pypi release should be ok.
 
-Contributors (cronological commit order)
+Contributors (chronological commit order)
 ========================================
 
 * `Dave St.Germain <https://bitbucket.org/dcs>`_ (original author)
