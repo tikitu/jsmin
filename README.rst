@@ -7,7 +7,7 @@ JavaScript minifier.
 Usage
 =====
 
-::
+.. code:: python
 
  from jsmin import jsmin
  with open('myfile.js') as js_file:
