@@ -41,6 +41,8 @@ the maintainer know somehow.)
 Build/test status
 =================
 
+Both default and stable branches are tested with Travis: https://travis-ci.org/tikitu/jsmin
+
 Stable (latest released version plus any new tests) is tested against CPython 2.6, 2.7, 3.2, and 3.3.
 Currently:
 
