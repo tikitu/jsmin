@@ -179,6 +179,9 @@ class JavascriptMinify(object):
                     or previous_non_space > '~') \
                     and (next2 in space_strings or next2 > '~'):
                     do_space = True
+                elif previous_non_space in '-+' and next2 == previous_non_space:
+                    # protect against + ++ or - -- sequences
+                    do_space = True
                 elif self.is_return and next2 == '/':
                     # returning a regex...
                     write(' ')
