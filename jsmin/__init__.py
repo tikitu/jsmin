@@ -37,7 +37,7 @@ else:
 
 
 __all__ = ['jsmin', 'JavascriptMinify']
-__version__ = '2.0.8'
+__version__ = '2.0.9'
 
 
 def jsmin(js):
@@ -95,6 +95,7 @@ class JavascriptMinify(object):
         newlineend_strings = enders + space_strings
         do_newline = False
         do_space = False
+        escape_slash_count = 0
         doing_single_comment = False
         previous_before_comment = ''
         doing_multi_comment = False
@@ -103,6 +104,8 @@ class JavascriptMinify(object):
         quote_buf = []
         
         previous = read(1)
+        if previous == '\\':
+            escape_slash_count += 1
         next1 = read(1)
         if previous == '/':
             if next1 == '/':
@@ -191,7 +194,7 @@ class JavascriptMinify(object):
                 if do_space:
                     write(' ')
                 if in_re:
-                    if previous != '\\' or next2 in 'gimy':
+                    if previous != '\\' or (not escape_slash_count % 2) or next2 in 'gimy':
                         in_re = False
                     write('/')
                 elif next2 == '/':                    
@@ -224,3 +227,7 @@ class JavascriptMinify(object):
             if previous >= '!':
                 previous_non_space = previous
 
+            if previous == '\\':
+                escape_slash_count += 1
+            else:
+                escape_slash_count = 0
