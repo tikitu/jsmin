@@ -118,11 +118,11 @@ another thing;"""
 
     def test_issue_10(self):
         js = '''
-        files = [{name: value.replace(/^.*\\/, '')}];
+        files = [{name: value.replace(/^.*\\\\/, '')}];
         // comment
         A
         '''
-        expected = 'files=[{name:value.replace(/^.*\\/,'')}];A'
+        expected = '''files=[{name:value.replace(/^.*\\\\/,'')}]; A'''
         self.assertMinified(js, expected)
 
     def testRe(self):
