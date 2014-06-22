@@ -321,6 +321,9 @@ var  foo    =  "hey";
         original = 'aaa;/(NaN| {2}|^$)/.test(a)&&(a="M 0 0");'
         self.assertMinified(original, original)  # there should be nothing jsmin can do here
 
+    def test_space_in_regex(self):
+        original = '/a (a)/.test("a")'
+        self.assertMinified(original, original)
 
 if __name__ == '__main__':
     unittest.main()
