@@ -332,5 +332,10 @@ var  foo    =  "hey";
         minified = jsmin.jsmin(original)
         self.assertIn('var msie', minified)
 
+    def test_angular_2(self):
+        original = 'var /* comment */ msie;'
+        expected = 'var msie;'
+        self.assertMinified(original, expected)
+
 if __name__ == '__main__':
     unittest.main()
