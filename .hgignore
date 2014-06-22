@@ -7,3 +7,4 @@ local/
 lib/
 bin/
 include/
+js_tests/
