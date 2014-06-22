@@ -313,5 +313,9 @@ var  foo    =  "hey";
         expected = '"s"'
         self.assertMinified(original, expected)
 
+    def test_space_with_regex_repeats(self):
+        original = '/(NaN| {2}|^$)/.test(a)&&(a="M 0 0");'
+        self.assertMinified(original, original)  # there should be nothing jsmin can do here
+
 if __name__ == '__main__':
     unittest.main()
