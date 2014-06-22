@@ -325,5 +325,12 @@ var  foo    =  "hey";
         original = '/a (a)/.test("a")'
         self.assertMinified(original, original)
 
+    def test_angular_1(self):
+        original = '''var /** holds major version number for IE or NaN for real browsers */
+                      msie,
+                      jqLite,           // delay binding since jQuery could be loaded after us.'''
+        minified = jsmin.jsmin(original)
+        self.assertIn('var msie', minified)
+
 if __name__ == '__main__':
     unittest.main()
