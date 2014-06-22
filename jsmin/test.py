@@ -333,9 +333,23 @@ var  foo    =  "hey";
         self.assertIn('var msie', minified)
 
     def test_angular_2(self):
+        original = 'var/* comment */msie;'
+        expected = 'var msie;'
+        self.assertMinified(original, expected)
+
+    def test_angular_3(self):
+        original = 'var /* comment */msie;'
+        expected = 'var msie;'
+        self.assertMinified(original, expected)
+
+    def test_angular_4(self):
         original = 'var /* comment */ msie;'
         expected = 'var msie;'
         self.assertMinified(original, expected)
+
+    def test_angular_4(self):
+        original = 'a/b'
+        self.assertMinified(original, original)
 
 if __name__ == '__main__':
     unittest.main()
