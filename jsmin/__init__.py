@@ -142,6 +142,8 @@ class JavascriptMinify(object):
             if doing_multi_comment:
                 if next1 == '*' and next2 == '/':
                     doing_multi_comment = False
+                    if previous_before_comment and previous_before_comment in space_strings:
+                        do_space = True
                     next2 = read(1)
             elif doing_single_comment:
                 if next1 in '\r\n':
@@ -203,6 +205,7 @@ class JavascriptMinify(object):
                     previous_before_comment = previous_non_space
                 elif next2 == '*':
                     doing_multi_comment = True
+                    previous_before_comment = previous_non_space
                     previous = next1
                     next1 = next2
                     next2 = read(1)
