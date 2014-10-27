@@ -351,5 +351,44 @@ var  foo    =  "hey";
         original = 'a/b'
         self.assertMinified(original, original)
 
+    def testBackticks(self):
+        original = '`test`'
+        self.assertMinified(original, original)
+
+        original = '` test with leading whitespace`'
+        self.assertMinified(original, original)
+
+        original = '`test with trailing whitespace `'
+        self.assertMinified(original, original)
+
+        original = '''`test
+with a new line`'''
+        self.assertMinified(original, original)
+
+        original = '''dumpAvStats: function(stats) {
+        var statsString = "";
+        if (stats.mozAvSyncDelay) {
+          statsString += `A/V sync: ${stats.mozAvSyncDelay} ms `;
+        }
+        if (stats.mozJitterBufferDelay) {
+          statsString += `Jitter-buffer delay: ${stats.mozJitterBufferDelay} ms`;
+        }
+
+        return React.DOM.div(null, statsString);'''
+        expected = 'dumpAvStats:function(stats){var statsString="";if(stats.mozAvSyncDelay){statsString+=`A/V sync: ${stats.mozAvSyncDelay} ms `;}\nif(stats.mozJitterBufferDelay){statsString+=`Jitter-buffer delay: ${stats.mozJitterBufferDelay} ms`;}\nreturn React.DOM.div(null,statsString);'
+        self.assertMinified(original, expected)
+
+    def testBackticksExpressions(self):
+        original = '`Fifteen is ${a + b} and not ${2 * a + b}.`'
+        self.assertMinified(original, original)
+
+        original = '''`Fifteen is ${a +
+b} and not ${2 * a + "b"}.`'''
+        self.assertMinified(original, original)
+
+    def testBackticksTagged(self):
+        original = 'tag`Hello ${ a + b } world ${ a * b}`;'
+        self.assertMinified(original, original)
+
 if __name__ == '__main__':
     unittest.main()

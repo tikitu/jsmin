@@ -90,7 +90,8 @@ class JavascriptMinify(object):
 
         space_strings = "abcdefghijklmnopqrstuvwxyz"\
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$\\"
-        starters, enders = '{[(+-', '}])+-"\''
+        quotes = "'\"`"
+        starters, enders = '{[(+-', '}])+-' + quotes
         newlinestart_strings = starters + space_strings
         newlineend_strings = enders + space_strings
         do_newline = False
@@ -120,7 +121,7 @@ class JavascriptMinify(object):
         elif not previous:
             return
         elif previous >= '!':
-            if previous in "'\"":
+            if previous in quotes:
                 in_quote = previous
             write(previous)
             previous_non_space = previous
@@ -219,9 +220,9 @@ class JavascriptMinify(object):
                 if do_newline:
                     write('\n')
                     do_newline = False
-                    
+
                 write(next1)
-                if not in_re and next1 in "'\"":
+                if not in_re and next1 in quotes:
                     in_quote = next1
                     quote_buf = []
 
