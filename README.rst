@@ -65,3 +65,4 @@ Contributors (chronological commit order)
 * `Hans weltar <https://bitbucket.org/hansweltar>`_
 * `Tikitu de Jager <mailto:tikitu+jsmin@logophile.org>`_ (current maintainer)
 * https://bitbucket.org/rennat
+* `Nick Alexander <https://bitbucket.org/ncalexan>`_
