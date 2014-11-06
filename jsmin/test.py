@@ -347,7 +347,7 @@ var  foo    =  "hey";
         expected = 'var msie;'
         self.assertMinified(original, expected)
 
-    def test_angular_4(self):
+    def test_angular_5(self):
         original = 'a/b'
         self.assertMinified(original, original)
 
