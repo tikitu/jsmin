@@ -17,6 +17,18 @@ You can run it as a commandline tool also::
 
   python -m jsmin myfile.js
 
+As yet, ``jsmin`` makes no attempt to be compatible with
+`ECMAScript 6 / ES.next / Harmony <http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts>`_.
+If you're using it on Harmony code, though, you might find the ``quote_chars``
+parameter useful:
+
+.. code:: python
+
+ from jsmin import jsmin
+ with open('myfile.js') as js_file:
+     minified = jsmin(js_file.read(), quote_chars="'\"`")
+
+
 Where to get it
 ===============
 
@@ -65,3 +77,4 @@ Contributors (chronological commit order)
 * `Hans weltar <https://bitbucket.org/hansweltar>`_
 * `Tikitu de Jager <mailto:tikitu+jsmin@logophile.org>`_ (current maintainer)
 * https://bitbucket.org/rennat
+* `Nick Alexander <https://bitbucket.org/ncalexan>`_
