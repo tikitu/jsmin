@@ -390,5 +390,15 @@ b} and not ${2 * a + "b"}.`'''
         original = 'tag`Hello ${ a + b } world ${ a * b}`;'
         self.assertMinified(original, original, quote_chars="'\"`")
 
+    def test_issue_16(self):
+        original = """
+            f = function() {
+                return /DataTree\/(.*)\//.exec(this._url)[1];
+            }
+        """
+        self.assertMinified(
+            original,
+            'f=function(){return /DataTree\/(.*)\//.exec(this._url)[1];}')
+
 if __name__ == '__main__':
     unittest.main()
