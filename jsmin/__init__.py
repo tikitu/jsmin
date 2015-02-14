@@ -37,7 +37,7 @@ else:
 
 
 __all__ = ['jsmin', 'JavascriptMinify']
-__version__ = '2.1.0'
+__version__ = '2.1.1'
 
 
 def jsmin(js, **kwargs):
@@ -83,6 +83,8 @@ class JavascriptMinify(object):
             if char in 'return':
                 self.return_buf += char
                 self.is_return = self.return_buf == 'return'
+            else:
+                self.return_buf = ''
             self.outs.write(char)
             if self.is_return:
                 self.return_buf = ''

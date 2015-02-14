@@ -1,11 +1,16 @@
 Changelog
 =========
 
+v2.1.1 (2015-02-14) Tikitu de Jager
+-----------------------------------
+
+- Fix #16: bug returning a literal regex containing escaped forward-slashes.
+
 v2.1.0 (2014-12-24) Tikitu de Jager
 -----------------------------------
 
-    * First changelog entries; see README.rst for prior contributors.
+- First changelog entries; see README.rst for prior contributors.
 
-    * Expose quote_chars parameter to provide just enough unofficial Harmony
-    support to be useful.
+- Expose quote_chars parameter to provide just enough unofficial Harmony
+  support to be useful.
 
