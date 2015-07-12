@@ -155,9 +155,9 @@ class JavascriptMinify(object):
                         next2 = read(1)
                         if not next2:
                             break
-                    if previous_before_comment in ')}]':
+                    if previous_before_comment and previous_before_comment in ')}]':
                         do_newline = True
-                    elif previous_before_comment in space_strings:
+                    elif previous_before_comment and previous_before_comment in space_strings:
                         write('\n')
             elif in_quote:
                 quote_buf.append(next1)
