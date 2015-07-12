@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v2.1.2 (2015-07-12) Tikitu de Jager
+-----------------------------------
+
+- Fix #17: bug when JS starts with comment then literal regex.
+
 v2.1.1 (2015-02-14) Tikitu de Jager
 -----------------------------------
 
