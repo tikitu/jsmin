@@ -33,20 +33,21 @@ Where to get it
 ===============
 
 * install the package `from pypi <https://pypi.python.org/pypi/jsmin/>`_
-* get the latest release `from the stable branch on bitbucket <https://bitbucket.org/dcs/jsmin/branch/stable>`_
-* get the development version `from the default branch on bitbucket <https://bitbucket.org/dcs/jsmin/branch/default>`_
+* get the latest release `from the default branch on github <https://github.com/tikitu/jsmin>`_
+* get the development version `from master on github <https://github.com/tikitu/jsmin/tree/master/jsmin>`_
 
 Contributing
 ============
 
-`Issues <https://bitbucket.org/dcs/jsmin/issues>`_ and `Pull requests <https://bitbucket.org/dcs/jsmin/pull-requests>`_
-will be gratefully received on Bitbucket. Pull requests on github are great too, but the issue tracker lives on
-bitbucket.
+`Issues <https://github.com/tikitu/jsmin/issues>`_ and `Pull requests <https://github.com/tikitu/jsmin/pulls>`_
+will be gratefully received on Github. The project used to be hosted
+`on bitbucket<https://bitbucket.org/dcs/jsmin/>`_ and old issues can still be
+found there.
 
 If possible, please make separate pull requests for tests and for code: tests will be committed on the stable branch
 (which tracks the latest released version) while code will go to default by, erm, default.
 
-Unless you request otherwise, your Bitbucket identity will be added to the contributor's list below; if you prefer a
+Unless you request otherwise, your Github identity will be added to the contributor's list below; if you prefer a
 different name feel free to add it in your pull request instead. (If you prefer not to be mentioned you'll have to let
 the maintainer know somehow.)
 
