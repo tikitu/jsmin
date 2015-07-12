@@ -52,10 +52,8 @@ class JsTests(unittest.TestCase):
         }
         //bye
         '''
-        expected = r""" 
-if(Object.isFunction(Array.prototype.forEach))
+        expected = r""" if(Object.isFunction(Array.prototype.forEach))
 Array.prototype._each=Array.prototype.forEach;if(!Array.prototype.indexOf)Array.prototype.indexOf=function(item,i){ function(){ foo; location='http://foo.com;';}"""
-        # print expected
         self.assertMinified(js, expected)
     
     def testEmpty(self):
