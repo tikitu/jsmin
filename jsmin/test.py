@@ -400,5 +400,11 @@ b} and not ${2 * a + "b"}.`'''
             original,
             'f=function(){return /DataTree\/(.*)\//.exec(this._url)[1];}')
 
+    def test_issue_17(self):
+        original = "// hi\n/^(get|post|head|put)$/i.test('POST')"
+        self.assertMinified(original,
+                            "/^(get|post|head|put)$/i.test('POST')")
+
+
 if __name__ == '__main__':
     unittest.main()
