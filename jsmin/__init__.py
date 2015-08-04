@@ -213,7 +213,7 @@ class JavascriptMinify(object):
                     next1 = next2
                     next2 = read(1)
                 else:
-                    in_re = previous_non_space in '(,=:[?!&|;' or self.is_return  # literal regular expression
+                    in_re = previous_non_space in '{(,=:[?!&|;' or self.is_return  # literal regular expression
                     write('/')
             else:
                 if do_space:
