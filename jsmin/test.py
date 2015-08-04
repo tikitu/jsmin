@@ -323,6 +323,11 @@ var  foo    =  "hey";
         original = '/a (a)/.test("a")'
         self.assertMinified(original, original)
 
+    def test_brackets_around_slashed_regex(self):
+        original = 'function a() { /\//.test("a") }'
+        expected = 'function a(){/\//.test("a")}/'
+        self.assertMinified(original, expected)
+
     def test_angular_1(self):
         original = '''var /** holds major version number for IE or NaN for real browsers */
                       msie,
