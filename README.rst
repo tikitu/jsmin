@@ -44,8 +44,7 @@ will be gratefully received on Github. The project used to be hosted
 `on bitbucket <https://bitbucket.org/dcs/jsmin/>`_ and old issues can still be
 found there.
 
-If possible, please make separate pull requests for tests and for code: tests will be committed on the stable branch
-(which tracks the latest released version) while code will go to default by, erm, default.
+If possible, please make separate pull requests for tests and for code: tests will be added to the `latest-release` branch while code will go to `master`.
 
 Unless you request otherwise, your Github identity will be added to the contributor's list below; if you prefer a
 different name feel free to add it in your pull request instead. (If you prefer not to be mentioned you'll have to let
@@ -54,22 +53,22 @@ the maintainer know somehow.)
 Build/test status
 =================
 
-Both default and stable branches are tested with Travis: https://travis-ci.org/tikitu/jsmin
+Both branches are tested with Travis: https://travis-ci.org/tikitu/jsmin
 
-Stable (latest released version plus any new tests) is tested against CPython 2.6, 2.7, 3.2, and 3.3.
+The `latest-release` branch (the version on PyPI plus any new tests) is tested against CPython 2.6, 2.7, 3.2, and 3.3.
 Currently:
 
-.. image:: https://travis-ci.org/tikitu/jsmin.png?branch=ghstable
+.. image:: https://travis-ci.org/tikitu/jsmin.png?branch=latest-release
 
-If stable is failing that means there's a new test that fails on *the latest released version on pypi*, with no fix yet
+If that branch is failing that means there's a new test that fails on *the latest released version on pypi*, with no fix yet
 released.
 
-Default (development version, might be ahead of latest released version) is tested against CPython 2.6, 2.7, 3.2, and
+The `master` branch (development version, might be ahead of latest released version) is tested against CPython 2.6, 2.7, 3.2, and
 3.3. Currently:
 
 .. image:: https://travis-ci.org/tikitu/jsmin.png?branch=master
 
-If default is failing don't use it, but as long as stable is passing the pypi release should be ok.
+If `master` is failing don't use it, but as long as `latest-release` is passing the pypi release should be ok.
 
 Contributors (chronological commit order)
 =========================================
