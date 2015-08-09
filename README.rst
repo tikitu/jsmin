@@ -79,3 +79,4 @@ Contributors (chronological commit order)
 * `Tikitu de Jager <mailto:tikitu+jsmin@logophile.org>`_ (current maintainer)
 * https://bitbucket.org/rennat
 * `Nick Alexander <https://bitbucket.org/ncalexan>`_
+* `Gennady Kovshenin <https://github.com/soulseekah>`_
