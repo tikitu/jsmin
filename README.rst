@@ -41,7 +41,7 @@ Contributing
 
 `Issues <https://github.com/tikitu/jsmin/issues>`_ and `Pull requests <https://github.com/tikitu/jsmin/pulls>`_
 will be gratefully received on Github. The project used to be hosted
-`on bitbucket<https://bitbucket.org/dcs/jsmin/>`_ and old issues can still be
+`on bitbucket <https://bitbucket.org/dcs/jsmin/>`_ and old issues can still be
 found there.
 
 If possible, please make separate pull requests for tests and for code: tests will be committed on the stable branch
