@@ -33,8 +33,8 @@ Where to get it
 ===============
 
 * install the package `from pypi <https://pypi.python.org/pypi/jsmin/>`_
-* get the latest release `from the default branch on github <https://github.com/tikitu/jsmin>`_
-* get the development version `from master on github <https://github.com/tikitu/jsmin/tree/master/jsmin>`_
+* get the latest release `from latest-release on github <https://github.com/tikitu/jsmin/tree/latest-release/jsmin>`_
+* get the development version `from master on github <https://github.com/tikitu/jsmin/>`_
 
 Contributing
 ============
