@@ -408,6 +408,15 @@ b} and not ${2 * a + "b"}.`'''
         self.assertMinified(original,
                             "/^(get|post|head|put)$/i.test('POST')")
 
+    def test_issue_6(self):
+        original = '''
+            respond.regex = {
+                comments: /\/\*[^*]*\*+([^/][^*]*\*+)*\//gi,
+                urls: 'whatever'
+            };
+        '''
+        expected = original.replace(' ', '').replace('\n', '')
+        self.assertMinified(original, expected)
 
 if __name__ == '__main__':
     unittest.main()
