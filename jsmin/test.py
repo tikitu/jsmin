@@ -14,7 +14,7 @@ class JsTests(unittest.TestCase):
     
     def assertMinified(self, js_input, expected, **kwargs):
         minified = jsmin.jsmin(js_input, **kwargs)
-        assert minified == expected, "%r != %r" % (minified, expected)
+        assert minified == expected, "\ngot: %r\nexp: %r" % (minified, expected)
         
     def testQuoted(self):
         js = r'''
