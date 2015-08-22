@@ -14,7 +14,7 @@ class JsTests(unittest.TestCase):
     
     def assertMinified(self, js_input, expected, **kwargs):
         minified = jsmin.jsmin(js_input, **kwargs)
-        assert minified == expected, "%r != %r" % (minified, expected)
+        assert minified == expected, "\ngot: %r\nexp: %r" % (minified, expected)
         
     def testQuoted(self):
         js = r'''
@@ -114,7 +114,7 @@ another thing;"""
     def testJustAComment(self):
         self.assertMinified('     // a comment', '')
 
-    def test_issue_10(self):
+    def test_issue_bitbucket_10(self):
         js = '''
         files = [{name: value.replace(/^.*\\\\/, '')}];
         // comment
@@ -393,7 +393,7 @@ b} and not ${2 * a + "b"}.`'''
         original = 'tag`Hello ${ a + b } world ${ a * b}`;'
         self.assertMinified(original, original, quote_chars="'\"`")
 
-    def test_issue_16(self):
+    def test_issue_bitbucket_16(self):
         original = """
             f = function() {
                 return /DataTree\/(.*)\//.exec(this._url)[1];
@@ -403,11 +403,20 @@ b} and not ${2 * a + "b"}.`'''
             original,
             'f=function(){return /DataTree\/(.*)\//.exec(this._url)[1];}')
 
-    def test_issue_17(self):
+    def test_issue_bitbucket_17(self):
         original = "// hi\n/^(get|post|head|put)$/i.test('POST')"
         self.assertMinified(original,
                             "/^(get|post|head|put)$/i.test('POST')")
 
+    def test_issue_6(self):
+        original = '''
+            respond.regex = {
+                comments: /\/\*[^*]*\*+([^/][^*]*\*+)*\//gi,
+                urls: 'whatever'
+            };
+        '''
+        expected = original.replace(' ', '').replace('\n', '')
+        self.assertMinified(original, expected)
 
 if __name__ == '__main__':
     unittest.main()
