@@ -37,7 +37,7 @@ else:
 
 
 __all__ = ['jsmin', 'JavascriptMinify']
-__version__ = '2.1.3'
+__version__ = '2.1.4'
 
 
 def jsmin(js, **kwargs):
