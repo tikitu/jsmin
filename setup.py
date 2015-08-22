@@ -24,7 +24,7 @@ setup(
     author_email='dave@st.germa.in',
     maintainer='Tikitu de Jager',
     maintainer_email='tikitu+jsmin@logophile.org',
-    test_suite='jsmin.test.JsTests',
+    test_suite='jsmin.test',
     license='MIT License',
     url='https://bitbucket.org/dcs/jsmin/',
     classifiers=[

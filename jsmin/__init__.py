@@ -102,7 +102,6 @@ class JavascriptMinify(object):
         doing_single_comment = False
         previous_before_comment = ''
         doing_multi_comment = False
-        in_re = False
         in_quote = ''
         quote_buf = []
         
@@ -118,8 +117,10 @@ class JavascriptMinify(object):
                 previous = next1
                 next1 = read(1)
             else:
-                in_re = True  # literal regex at start of script
-                write(previous)
+                self.regex_literal(previous, next1)
+                # hackish: after regex literal previous is still /
+                # (it was the initial /, now it's the last /)
+                next1 = read(1)
         elif not previous:
             return
         elif previous >= '!':
@@ -185,7 +186,7 @@ class JavascriptMinify(object):
                                 or next2 > '~' or next2 == '/':
                                 do_newline = True
                             break
-            elif next1 < '!' and not in_re:
+            elif next1 < '!':
                 if (previous_non_space in space_strings \
                     or previous_non_space > '~') \
                     and (next2 in space_strings or next2 > '~'):
@@ -199,11 +200,7 @@ class JavascriptMinify(object):
             elif next1 == '/':
                 if do_space:
                     write(' ')
-                if in_re:
-                    if previous != '\\' or (not escape_slash_count % 2) or next2 in 'gimy':
-                        in_re = False
-                    write('/')
-                elif next2 == '/':                    
+                if next2 == '/':
                     doing_single_comment = True
                     previous_before_comment = previous_non_space
                 elif next2 == '*':
@@ -213,8 +210,13 @@ class JavascriptMinify(object):
                     next1 = next2
                     next2 = read(1)
                 else:
-                    in_re = previous_non_space in '{(,=:[?!&|;' or self.is_return  # literal regular expression
-                    write('/')
+                    if previous_non_space in '{(,=:[?!&|;' or self.is_return:
+                        self.regex_literal(next1, next2)
+                        # hackish: after regex literal next1 is still /
+                        # (it was the initial /, now it's the last /)
+                        next2 = read(1)
+                    else:
+                        write('/')
             else:
                 if do_space:
                     do_space = False
@@ -224,7 +226,7 @@ class JavascriptMinify(object):
                     do_newline = False
 
                 write(next1)
-                if not in_re and next1 in self.quote_chars:
+                if next1 in self.quote_chars:
                     in_quote = next1
                     quote_buf = []
 
@@ -238,3 +240,29 @@ class JavascriptMinify(object):
                 escape_slash_count += 1
             else:
                 escape_slash_count = 0
+
+    def regex_literal(self, next1, next2):
+        assert next1 == '/'  # otherwise we should not be called!
+
+        self.return_buf = ''
+
+        read = self.ins.read
+        write = self.outs.write
+
+        in_char_class = False
+
+        write('/')
+
+        next = next2
+        while next != '/' or in_char_class:
+            write(next)
+            if next == '\\':
+                write(read(1))  # whatever is next is escaped
+            elif next == '[':
+                write(read(1))  # character class cannot be empty
+                in_char_class = True
+            elif next == ']':
+                in_char_class = False
+            next = read(1)
+
+        write('/')
