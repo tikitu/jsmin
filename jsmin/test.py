@@ -1,6 +1,6 @@
 import unittest
 import jsmin
-import sys
+
 
 class JsTests(unittest.TestCase):
     def _minify(self, js):
@@ -417,6 +417,59 @@ b} and not ${2 * a + "b"}.`'''
         '''
         expected = original.replace(' ', '').replace('\n', '')
         self.assertMinified(original, expected)
+
+
+class RegexTests(unittest.TestCase):
+
+    def regex_recognise(self, js):
+        if not jsmin.is_3:
+            if jsmin.cStringIO and not isinstance(js, unicode):
+                # strings can use cStringIO for a 3x performance
+                # improvement, but unicode (in python2) cannot
+                klass = jsmin.cStringIO.StringIO
+            else:
+                klass = jsmin.StringIO.StringIO
+        else:
+            klass = jsmin.io.StringIO
+        ins = klass(js[2:])
+        outs = klass()
+        jsmin.JavascriptMinify(ins, outs).regex_literal(js[0], js[1])
+        return outs.getvalue()
+
+    def assert_regex(self, js_input, expected):
+        assert js_input[0] == '/'  # otherwise we should not be testing!
+        recognised = self.regex_recognise(js_input)
+        assert recognised == expected, "\n in: %r\ngot: %r\nexp: %r" % (js_input, recognised, expected)
+
+    def test_simple(self):
+        self.assert_regex('/123/g', '/123/')
+
+    def test_character_class(self):
+        self.assert_regex('/a[0-9]b/g', '/a[0-9]b/')
+
+    def test_character_class_with_slash(self):
+        self.assert_regex('/a[/]b/g', '/a[/]b/')
+
+    def test_escaped_forward_slash(self):
+        self.assert_regex(r'/a\/b/g', r'/a\/b/')
+
+    def test_escaped_back_slash(self):
+        self.assert_regex(r'/a\\/g', r'/a\\/')
+
+    def test_empty_character_class(self):
+        # This one is subtle: an empty character class is not allowed, afaics
+        # from http://regexpal.com/ Chrome Version 44.0.2403.155 (64-bit) Mac
+        # so this char class is interpreted as containing ]/ *not* as char
+        # class [] followed by end-of-regex /.
+        self.assert_regex('/a[]/]b/g', '/a[]/]b/')
+
+    def test_precedence_of_parens(self):
+        # judging from
+        # http://regexpal.com/ Chrome Version 44.0.2403.155 (64-bit) Mac
+        # () have lower precedence than []
+        self.assert_regex('/a([)])b/g', '/a([)])b/')
+        self.assert_regex('/a[(]b/g', '/a[(]b/')
+
 
 if __name__ == '__main__':
     unittest.main()
