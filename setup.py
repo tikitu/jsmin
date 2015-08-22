@@ -18,7 +18,7 @@ setup(
     name="jsmin",
     version=re.search(r'__version__ = ["\']([^"\']+)', open('jsmin/__init__.py').read()).group(1),
     packages=['jsmin'],
-    description='JavaScript minifier.\nPLEASE UPDATE TO VERSION >= 2.0.6. Older versions have a serious bug related to comments.',
+    description='JavaScript minifier.',
     long_description=long_description(),
     author='Dave St.Germain',
     author_email='dave@st.germa.in',
