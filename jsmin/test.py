@@ -365,7 +365,7 @@ var  foo    =  "hey";
                       msie,
                       jqLite,           // delay binding since jQuery could be loaded after us.'''
         minified = jsmin.jsmin(original)
-        self.assertTrue('var msie' in minified)
+        self.assertTrue('var\nmsie' in minified)
 
     def test_angular_2(self):
         original = 'var/* comment */msie;'
