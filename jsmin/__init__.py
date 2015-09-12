@@ -105,33 +105,8 @@ class JavascriptMinify(object):
         in_quote = ''
         quote_buf = []
         
-        previous = read(1)
-        if previous == '\\':
-            escape_slash_count += 1
+        previous_non_space = ';'
         next1 = read(1)
-        if previous == '/':
-            if next1 == '/':
-                doing_single_comment = True
-            elif next1 == '*':
-                doing_multi_comment = True
-                previous = next1
-                next1 = read(1)
-            else:
-                self.regex_literal(previous, next1)
-                # hackish: after regex literal previous is still /
-                # (it was the initial /, now it's the last /)
-                next1 = read(1)
-        elif not previous:
-            return
-        elif previous >= '!':
-            if previous in self.quote_chars:
-                in_quote = previous
-            write(previous)
-            previous_non_space = previous
-        else:
-            previous_non_space = ' '
-        if not next1:
-            return
 
         while next1:
             next2 = read(1)
@@ -222,16 +197,15 @@ class JavascriptMinify(object):
                     in_quote = next1
                     quote_buf = []
 
-            previous = next1
-            next1 = next2
+            if next1 >= '!':
+                previous_non_space = next1
 
-            if previous >= '!':
-                previous_non_space = previous
-
-            if previous == '\\':
+            if next1 == '\\':
                 escape_slash_count += 1
             else:
                 escape_slash_count = 0
+
+            next1 = next2
 
     def regex_literal(self, next1, next2):
         assert next1 == '/'  # otherwise we should not be called!
