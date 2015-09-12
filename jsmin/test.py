@@ -505,6 +505,20 @@ b} and not ${2 * a + "b"}.`'''
     def test_block_comment_With_implicit_semicolon(self):
         self.assertMinified('a/**/\nvar b', 'a\nvar b')
 
+    def test_issue_9_single_comments(self):
+        original = '''
+            var a = "hello" // this is a comment
+                       a += " world"
+        '''
+        self.assertMinified(original, 'var a="hello"\na+=" world"')
+
+    def test_issue_9_multi_comments(self):
+        original = '''
+            var a = "hello" /* this is a comment */
+                       a += " world"
+        '''
+        self.assertMinified(original, 'var a="hello"\na+=" world"')
+
 
 class RegexTests(unittest.TestCase):
 
