@@ -493,6 +493,12 @@ b} and not ${2 * a + "b"}.`'''
     def test_ends_with_string(self):
         self.assertMinified('var s = "s"', 'var s="s"')
 
+    def test_short_comment(self):
+        self.assertMinified('a;/**/b', 'a;b')
+
+    def test_shorter_comment(self):
+        self.assertMinified('a;/*/*/b', 'a;b')
+
 
 class RegexTests(unittest.TestCase):
 

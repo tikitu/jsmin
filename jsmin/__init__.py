@@ -103,8 +103,6 @@ class JavascriptMinify(object):
         do_newline = False
         do_space = False
         escape_slash_count = 0
-        previous_before_comment = ''
-        doing_multi_comment = False
         in_quote = ''
         quote_buf = []
         
@@ -113,13 +111,7 @@ class JavascriptMinify(object):
 
         while next1:
             next2 = read(1)
-            if doing_multi_comment:
-                if next1 == '*' and next2 == '/':
-                    doing_multi_comment = False
-                    if previous_before_comment and previous_before_comment in space_strings:
-                        do_space = True
-                    next2 = read(1)
-            elif in_quote:
+            if in_quote:
                 quote_buf.append(next1)
 
                 if next1 == in_quote:
@@ -156,10 +148,10 @@ class JavascriptMinify(object):
                     next2, do_newline = self.newline(
                         previous_non_space, next2, do_newline)
                 elif next2 == '*':
-                    doing_multi_comment = True
-                    previous_before_comment = previous_non_space
-                    next1 = next2
+                    self.block_comment(next1, next2)
                     next2 = read(1)
+                    if previous_non_space in space_strings:
+                        do_space = True
                 else:
                     if previous_non_space in '{(,=:[?!&|;' or self.is_return:
                         self.regex_literal(next1, next2)
@@ -228,6 +220,19 @@ class JavascriptMinify(object):
             next1 = read(1)
 
         return next1
+
+    def block_comment(self, next1, next2):
+        assert next1 == '/'
+        assert next2 == '*'
+
+        read = self.ins.read
+
+        # Skip past first /* and avoid catching on /*/...*/
+        next1 = read(1)
+        next2 = read(1)
+        while next1 != '*' or next2 != '/':
+            next1 = next2
+            next2 = read(1)
 
     def newline(self, previous_non_space, next2, do_newline):
         read = self.ins.read
