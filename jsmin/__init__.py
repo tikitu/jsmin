@@ -105,7 +105,8 @@ class JavascriptMinify(object):
         escape_slash_count = 0
         in_quote = ''
         quote_buf = []
-        
+
+        previous = ';'
         previous_non_space = ';'
         next1 = read(1)
 
@@ -152,6 +153,7 @@ class JavascriptMinify(object):
                     next2 = read(1)
                     if previous_non_space in space_strings:
                         do_space = True
+                    next1 = previous
                 else:
                     if previous_non_space in '{(,=:[?!&|;' or self.is_return:
                         self.regex_literal(next1, next2)
@@ -182,6 +184,7 @@ class JavascriptMinify(object):
             else:
                 escape_slash_count = 0
 
+            previous = next1
             next1 = next2
 
     def regex_literal(self, next1, next2):

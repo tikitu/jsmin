@@ -499,6 +499,12 @@ b} and not ${2 * a + "b"}.`'''
     def test_shorter_comment(self):
         self.assertMinified('a;/*/*/b', 'a;b')
 
+    def test_block_comment_with_semicolon(self):
+        self.assertMinified('a;/**/\nb', 'a;b')
+
+    def test_block_comment_With_implicit_semicolon(self):
+        self.assertMinified('a/**/\nvar b', 'a\nvar b')
+
 
 class RegexTests(unittest.TestCase):
 
