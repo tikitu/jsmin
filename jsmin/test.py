@@ -418,6 +418,34 @@ b} and not ${2 * a + "b"}.`'''
         expected = original.replace(' ', '').replace('\n', '')
         self.assertMinified(original, expected)
 
+    def test_issue_9(self):
+        original = '\n'.join([
+            'var a = \'hi\' // this is a comment',
+            'var a = \'hi\' /* this is also a  comment */',
+            'console.log(1) // this is a comment',
+            'console.log(1) /* this is also a comment */',
+            '1 // this is a comment',
+            '1 /* this is also a comment */',
+            '{} // this is a comment',
+            '{} /* this is also a comment */',
+            '"YOLO" /* this is a comment */',
+            '"YOLO" // this is a comment',
+            'var b'
+        ])
+        expected = '\n'.join([
+            'var a=\'hi\'',
+            'var a=\'hi\'',
+            'console.log(1)',
+            'console.log(1)',
+            '1',
+            '1',
+            '{}',
+            '{}',
+            '"YOLO"',
+            '"YOLO"',
+            'var b'
+        ])
+        self.assertMinified(original, expected)
 
 class RegexTests(unittest.TestCase):
 
@@ -469,7 +497,6 @@ class RegexTests(unittest.TestCase):
         # () have lower precedence than []
         self.assert_regex('/a([)])b/g', '/a([)])b/')
         self.assert_regex('/a[(]b/g', '/a[(]b/')
-
 
 if __name__ == '__main__':
     unittest.main()
