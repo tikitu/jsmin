@@ -93,9 +93,13 @@ class JavascriptMinify(object):
 
         space_strings = "abcdefghijklmnopqrstuvwxyz"\
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$\\"
+        self.space_strings = space_strings
         starters, enders = '{[(+-', '}])+-' + self.quote_chars
-        newlinestart_strings = starters + space_strings
-        newlineend_strings = enders + space_strings
+        newlinestart_strings = starters + space_strings + self.quote_chars
+        newlineend_strings = enders + space_strings + self.quote_chars
+        self.newlinestart_strings = newlinestart_strings
+        self.newlineend_strings = newlineend_strings
+
         do_newline = False
         do_space = False
         escape_slash_count = 0
@@ -141,18 +145,8 @@ class JavascriptMinify(object):
                         in_quote = ''
                         write(''.join(quote_buf))
             elif next1 in '\r\n':
-                if previous_non_space in newlineend_strings \
-                    or previous_non_space > '~':
-                    while 1:
-                        if next2 < '!':
-                            next2 = read(1)
-                            if not next2:
-                                break
-                        else:
-                            if next2 in newlinestart_strings \
-                                or next2 > '~' or next2 == '/':
-                                do_newline = True
-                            break
+                next2, do_newline = self.newline(
+                    previous_non_space, next2, do_newline)
             elif next1 < '!':
                 if (previous_non_space in space_strings \
                     or previous_non_space > '~') \
@@ -232,3 +226,22 @@ class JavascriptMinify(object):
             next = read(1)
 
         write('/')
+
+    def newline(self, previous_non_space, next2, do_newline):
+        read = self.ins.read
+
+        if previous_non_space and (
+                        previous_non_space in self.newlineend_strings
+                        or previous_non_space > '~'):
+            while 1:
+                if next2 < '!':
+                    next2 = read(1)
+                    if not next2:
+                        break
+                else:
+                    if next2 in self.newlinestart_strings \
+                            or next2 > '~' or next2 == '/':
+                        do_newline = True
+                    break
+
+        return next2, do_newline
