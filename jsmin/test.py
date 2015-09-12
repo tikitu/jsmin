@@ -52,8 +52,8 @@ class JsTests(unittest.TestCase):
         }
         //bye
         '''
-        expected = r""" if(Object.isFunction(Array.prototype.forEach))
-Array.prototype._each=Array.prototype.forEach;if(!Array.prototype.indexOf)Array.prototype.indexOf=function(item,i){ function(){ foo; location='http://foo.com;';}"""
+        expected = r"""if(Object.isFunction(Array.prototype.forEach))
+Array.prototype._each=Array.prototype.forEach;if(!Array.prototype.indexOf)Array.prototype.indexOf=function(item,i){function(){foo;location='http://foo.com;';}"""
         self.assertMinified(js, expected)
     
     def testEmpty(self):
@@ -120,7 +120,16 @@ another thing;"""
         // comment
         A
         '''
-        expected = '''files=[{name:value.replace(/^.*\\\\/,'')}]; A'''
+        expected = '''files=[{name:value.replace(/^.*\\\\/,'')}];A'''
+        self.assertMinified(js, expected)
+
+    def test_issue_bitbucket_10_without_semicolon(self):
+        js = '''
+        files = [{name: value.replace(/^.*\\\\/, '')}]
+        // comment
+        A
+        '''
+        expected = '''files=[{name:value.replace(/^.*\\\\/,'')}]\nA'''
         self.assertMinified(js, expected)
 
     def testRe(self):
@@ -152,7 +161,7 @@ another thing;"""
         Element.cleanWhitespace(element); 
         """
         expected = r"""var options_for_droppable={overlap:options.overlap,containment:options.containment,tree:options.tree,hoverclass:options.hoverclass,onHover:Sortable.onHover}
-var options_for_tree={onHover:Sortable.onEmptyHover,overlap:options.overlap,containment:options.containment,hoverclass:options.hoverclass} 
+var options_for_tree={onHover:Sortable.onEmptyHover,overlap:options.overlap,containment:options.containment,hoverclass:options.hoverclass}
 Element.cleanWhitespace(element);"""
         self.assertMinified(js, expected)
 
@@ -204,10 +213,22 @@ Element.cleanWhitespace(element);"""
           onFailure: this.onFailure
         });
         """
-        expected = r"""onSuccess:function(transport){var js=transport.responseText.strip();if(!/^\[.*\]$/.test(js)) 
+        expected = r"""onSuccess:function(transport){var js=transport.responseText.strip();if(!/^\[.*\]$/.test(js))
 throw'Server returned an invalid collection representation.';this._collection=eval(js);this.checkForExternalText();}.bind(this),onFailure:this.onFailure});"""
         self.assertMinified(js, expected)
-    
+        js_without_comment = r"""
+        onSuccess: function(transport) {
+            var js = transport.responseText.strip();
+            if (!/^\[.*\]$/.test(js))
+              throw 'Server returned an invalid collection representation.';
+            this._collection = eval(js);
+            this.checkForExternalText();
+          }.bind(this),
+          onFailure: this.onFailure
+        });
+        """
+        self.assertMinified(js_without_comment, expected)
+
     def testSpaceInRe(self):
         js = r"""
         num = num.replace(/ /g,'');
@@ -272,16 +293,22 @@ var  foo    =  "hey";
             }""", "{a:1,}")
 
     def testCommentInObj2(self):
-        self.assertMinified("{a: 1//comment\r\n}", "{a:1\n}")
+        self.assertMinified("{a: 1//comment\r\n}", "{a:1}")
 
     def testImplicitSemicolon(self):
         # return \n 1  is equivalent with   return; 1
         # so best make sure jsmin retains the newline
+        self.assertMinified("return\na", "return\na")
+
+    def test_explicit_semicolon(self):
         self.assertMinified("return;//comment\r\na", "return;a")
 
     def testImplicitSemicolon2(self):
+        self.assertMinified("return//comment...\r\nar", "return\nar")
+
+    def testImplicitSemicolon3(self):
         self.assertMinified("return//comment...\r\na", "return\na")
-    
+
     def testSingleComment2(self):
         self.assertMinified('x.replace(/\//, "_")// slash to underscore',
                 'x.replace(/\//,"_")')
@@ -298,7 +325,12 @@ var  foo    =  "hey";
         original = '''
         return foo;//comment
         return bar;'''
-        expected = 'return foo; return bar;'
+        expected = 'return foo;return bar;'
+        self.assertMinified(original, expected)
+        original = '''
+        return foo
+        return bar;'''
+        expected = 'return foo\nreturn bar;'
         self.assertMinified(original, expected)
 
     def test_space_plus(self):
@@ -430,6 +462,8 @@ b} and not ${2 * a + "b"}.`'''
             '{} /* this is also a comment */',
             '"YOLO" /* this is a comment */',
             '"YOLO" // this is a comment',
+            '(1 + 2) // comment',
+            '(1 + 2) /* yup still comment */',
             'var b'
         ])
         expected = '\n'.join([
@@ -443,9 +477,15 @@ b} and not ${2 * a + "b"}.`'''
             '{}',
             '"YOLO"',
             '"YOLO"',
+            '(1+2)',
+            '(1+2)',
             'var b'
         ])
+        self.assertMinified(expected, expected)
         self.assertMinified(original, expected)
+
+    def test_newline_between_strings(self):
+        self.assertMinified('"yolo"\n"loyo"', '"yolo"\n"loyo"')
 
     def test_issue_10_comments_between_tokens(self):
         self.assertMinified('var/* comment */a', 'var a')

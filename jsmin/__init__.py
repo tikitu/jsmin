@@ -103,7 +103,6 @@ class JavascriptMinify(object):
         do_newline = False
         do_space = False
         escape_slash_count = 0
-        doing_single_comment = False
         previous_before_comment = ''
         doing_multi_comment = False
         in_quote = ''
@@ -120,17 +119,6 @@ class JavascriptMinify(object):
                     if previous_before_comment and previous_before_comment in space_strings:
                         do_space = True
                     next2 = read(1)
-            elif doing_single_comment:
-                if next1 in '\r\n':
-                    doing_single_comment = False
-                    while next2 in '\r\n':
-                        next2 = read(1)
-                        if not next2:
-                            break
-                    if previous_before_comment and previous_before_comment in ')}]':
-                        do_newline = True
-                    elif previous_before_comment and previous_before_comment in space_strings:
-                        write('\n')
             elif in_quote:
                 quote_buf.append(next1)
 
@@ -162,12 +150,14 @@ class JavascriptMinify(object):
                 if do_space:
                     write(' ')
                 if next2 == '/':
-                    doing_single_comment = True
-                    previous_before_comment = previous_non_space
+                    # Line comment: treat it as a newline, but skip it
+                    next2 = self.line_comment(next1, next2)
+                    next1 = '\n'
+                    next2, do_newline = self.newline(
+                        previous_non_space, next2, do_newline)
                 elif next2 == '*':
                     doing_multi_comment = True
                     previous_before_comment = previous_non_space
-                    previous = next1
                     next1 = next2
                     next2 = read(1)
                 else:
@@ -226,6 +216,18 @@ class JavascriptMinify(object):
             next = read(1)
 
         write('/')
+
+    def line_comment(self, next1, next2):
+        assert next1 == next2 == '/'
+
+        read = self.ins.read
+
+        while next1 and next1 not in '\r\n':
+            next1 = read(1)
+        while next1 and next1 in '\r\n':
+            next1 = read(1)
+
+        return next1
 
     def newline(self, previous_non_space, next2, do_newline):
         read = self.ins.read
