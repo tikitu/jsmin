@@ -447,6 +447,10 @@ b} and not ${2 * a + "b"}.`'''
         ])
         self.assertMinified(original, expected)
 
+    def test_issue_10_comments_between_tokens(self):
+        self.assertMinified('var/* comment */a', 'var a')
+
+
 class RegexTests(unittest.TestCase):
 
     def regex_recognise(self, js):
