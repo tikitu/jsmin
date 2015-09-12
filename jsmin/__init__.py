@@ -161,12 +161,13 @@ class JavascriptMinify(object):
                     else:
                         write('/')
             else:
-                if do_space:
-                    do_space = False
-                    write(' ')
                 if do_newline:
                     write('\n')
                     do_newline = False
+                    do_space = False
+                if do_space:
+                    do_space = False
+                    write(' ')
 
                 write(next1)
                 if next1 in self.quote_chars:
