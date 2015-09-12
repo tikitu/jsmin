@@ -450,6 +450,9 @@ b} and not ${2 * a + "b"}.`'''
     def test_issue_10_comments_between_tokens(self):
         self.assertMinified('var/* comment */a', 'var a')
 
+    def test_ends_with_string(self):
+        self.assertMinified('var s = "s"', 'var s="s"')
+
 
 class RegexTests(unittest.TestCase):
 

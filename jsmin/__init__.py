@@ -133,16 +133,8 @@ class JavascriptMinify(object):
         if not next1:
             return
 
-        while 1:
+        while next1:
             next2 = read(1)
-            if not next2:
-                last = next1.strip()
-                if not (doing_single_comment or doing_multi_comment)\
-                    and last not in ('', '/'):
-                    if in_quote:
-                        write(''.join(quote_buf))
-                    write(last)
-                break
             if doing_multi_comment:
                 if next1 == '*' and next2 == '/':
                     doing_multi_comment = False
