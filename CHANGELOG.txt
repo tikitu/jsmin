@@ -1,6 +1,16 @@
 Changelog
 =========
 
+v2.1.5 (2015-10-11) Tikitu de Jager
+-----------------------------------
+
+- Fix #9: Premature end of statement caused by multi-line comment not
+  adding newline.
+
+- Fix #10: Removing multiline comment separating tokens must leave a space.
+
+- Refactor comment handling for maintainability.
+
 v2.1.4 (2015-08-23) Tikitu de Jager
 -----------------------------------
 
