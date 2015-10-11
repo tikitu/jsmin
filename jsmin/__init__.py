@@ -37,7 +37,7 @@ else:
 
 
 __all__ = ['jsmin', 'JavascriptMinify']
-__version__ = '2.1.4'
+__version__ = '2.1.5.dev'
 
 
 def jsmin(js, **kwargs):
@@ -93,74 +93,26 @@ class JavascriptMinify(object):
 
         space_strings = "abcdefghijklmnopqrstuvwxyz"\
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$\\"
+        self.space_strings = space_strings
         starters, enders = '{[(+-', '}])+-' + self.quote_chars
-        newlinestart_strings = starters + space_strings
-        newlineend_strings = enders + space_strings
+        newlinestart_strings = starters + space_strings + self.quote_chars
+        newlineend_strings = enders + space_strings + self.quote_chars
+        self.newlinestart_strings = newlinestart_strings
+        self.newlineend_strings = newlineend_strings
+
         do_newline = False
         do_space = False
         escape_slash_count = 0
-        doing_single_comment = False
-        previous_before_comment = ''
-        doing_multi_comment = False
         in_quote = ''
         quote_buf = []
-        
-        previous = read(1)
-        if previous == '\\':
-            escape_slash_count += 1
-        next1 = read(1)
-        if previous == '/':
-            if next1 == '/':
-                doing_single_comment = True
-            elif next1 == '*':
-                doing_multi_comment = True
-                previous = next1
-                next1 = read(1)
-            else:
-                self.regex_literal(previous, next1)
-                # hackish: after regex literal previous is still /
-                # (it was the initial /, now it's the last /)
-                next1 = read(1)
-        elif not previous:
-            return
-        elif previous >= '!':
-            if previous in self.quote_chars:
-                in_quote = previous
-            write(previous)
-            previous_non_space = previous
-        else:
-            previous_non_space = ' '
-        if not next1:
-            return
 
-        while 1:
+        previous = ';'
+        previous_non_space = ';'
+        next1 = read(1)
+
+        while next1:
             next2 = read(1)
-            if not next2:
-                last = next1.strip()
-                if not (doing_single_comment or doing_multi_comment)\
-                    and last not in ('', '/'):
-                    if in_quote:
-                        write(''.join(quote_buf))
-                    write(last)
-                break
-            if doing_multi_comment:
-                if next1 == '*' and next2 == '/':
-                    doing_multi_comment = False
-                    if previous_before_comment and previous_before_comment in space_strings:
-                        do_space = True
-                    next2 = read(1)
-            elif doing_single_comment:
-                if next1 in '\r\n':
-                    doing_single_comment = False
-                    while next2 in '\r\n':
-                        next2 = read(1)
-                        if not next2:
-                            break
-                    if previous_before_comment and previous_before_comment in ')}]':
-                        do_newline = True
-                    elif previous_before_comment and previous_before_comment in space_strings:
-                        write('\n')
-            elif in_quote:
+            if in_quote:
                 quote_buf.append(next1)
 
                 if next1 == in_quote:
@@ -174,18 +126,8 @@ class JavascriptMinify(object):
                         in_quote = ''
                         write(''.join(quote_buf))
             elif next1 in '\r\n':
-                if previous_non_space in newlineend_strings \
-                    or previous_non_space > '~':
-                    while 1:
-                        if next2 < '!':
-                            next2 = read(1)
-                            if not next2:
-                                break
-                        else:
-                            if next2 in newlinestart_strings \
-                                or next2 > '~' or next2 == '/':
-                                do_newline = True
-                            break
+                next2, do_newline = self.newline(
+                    previous_non_space, next2, do_newline)
             elif next1 < '!':
                 if (previous_non_space in space_strings \
                     or previous_non_space > '~') \
@@ -201,14 +143,17 @@ class JavascriptMinify(object):
                 if do_space:
                     write(' ')
                 if next2 == '/':
-                    doing_single_comment = True
-                    previous_before_comment = previous_non_space
+                    # Line comment: treat it as a newline, but skip it
+                    next2 = self.line_comment(next1, next2)
+                    next1 = '\n'
+                    next2, do_newline = self.newline(
+                        previous_non_space, next2, do_newline)
                 elif next2 == '*':
-                    doing_multi_comment = True
-                    previous_before_comment = previous_non_space
-                    previous = next1
-                    next1 = next2
+                    self.block_comment(next1, next2)
                     next2 = read(1)
+                    if previous_non_space in space_strings:
+                        do_space = True
+                    next1 = previous
                 else:
                     if previous_non_space in '{(,=:[?!&|;' or self.is_return:
                         self.regex_literal(next1, next2)
@@ -218,28 +163,29 @@ class JavascriptMinify(object):
                     else:
                         write('/')
             else:
-                if do_space:
-                    do_space = False
-                    write(' ')
                 if do_newline:
                     write('\n')
                     do_newline = False
+                    do_space = False
+                if do_space:
+                    do_space = False
+                    write(' ')
 
                 write(next1)
                 if next1 in self.quote_chars:
                     in_quote = next1
                     quote_buf = []
 
-            previous = next1
-            next1 = next2
+            if next1 >= '!':
+                previous_non_space = next1
 
-            if previous >= '!':
-                previous_non_space = previous
-
-            if previous == '\\':
+            if next1 == '\\':
                 escape_slash_count += 1
             else:
                 escape_slash_count = 0
+
+            previous = next1
+            next1 = next2
 
     def regex_literal(self, next1, next2):
         assert next1 == '/'  # otherwise we should not be called!
@@ -266,3 +212,47 @@ class JavascriptMinify(object):
             next = read(1)
 
         write('/')
+
+    def line_comment(self, next1, next2):
+        assert next1 == next2 == '/'
+
+        read = self.ins.read
+
+        while next1 and next1 not in '\r\n':
+            next1 = read(1)
+        while next1 and next1 in '\r\n':
+            next1 = read(1)
+
+        return next1
+
+    def block_comment(self, next1, next2):
+        assert next1 == '/'
+        assert next2 == '*'
+
+        read = self.ins.read
+
+        # Skip past first /* and avoid catching on /*/...*/
+        next1 = read(1)
+        next2 = read(1)
+        while next1 != '*' or next2 != '/':
+            next1 = next2
+            next2 = read(1)
+
+    def newline(self, previous_non_space, next2, do_newline):
+        read = self.ins.read
+
+        if previous_non_space and (
+                        previous_non_space in self.newlineend_strings
+                        or previous_non_space > '~'):
+            while 1:
+                if next2 < '!':
+                    next2 = read(1)
+                    if not next2:
+                        break
+                else:
+                    if next2 in self.newlinestart_strings \
+                            or next2 > '~' or next2 == '/':
+                        do_newline = True
+                    break
+
+        return next2, do_newline
