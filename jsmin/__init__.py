@@ -94,7 +94,7 @@ class JavascriptMinify(object):
         space_strings = "abcdefghijklmnopqrstuvwxyz"\
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$\\"
         self.space_strings = space_strings
-        starters, enders = '{[(+-', '}])+-' + self.quote_chars
+        starters, enders = '{[(+-', '}])+-/' + self.quote_chars
         newlinestart_strings = starters + space_strings + self.quote_chars
         newlineend_strings = enders + space_strings + self.quote_chars
         self.newlinestart_strings = newlinestart_strings
