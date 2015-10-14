@@ -519,6 +519,19 @@ b} and not ${2 * a + "b"}.`'''
         '''
         self.assertMinified(original, 'var a="hello"\na+=" world"')
 
+    def test_issue_12_re_nl_if(self):
+        original = '''
+            var re = /\d{4}/
+            if (1) { console.log(2); }'''
+        self.assertMinified(
+            original, 'var re=/\d{4}/\nif(1){console.log(2);}')
+
+    def test_issue_12_re_nl_other(self):
+        original = '''
+            var re = /\d{4}/
+            g = 10'''
+        self.assertMinified(original , 'var re=/\d{4}/\ng=10')
+
 
 class RegexTests(unittest.TestCase):
 
