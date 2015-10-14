@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v2.1.6 (2015-10-14) Tikitu de Jager
+-----------------------------------
+
+- Fix #12: Newline following a regex literal should not be elided.
+
 v2.1.5 (2015-10-11) Tikitu de Jager
 -----------------------------------
 
