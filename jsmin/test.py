@@ -532,6 +532,10 @@ b} and not ${2 * a + "b"}.`'''
             g = 10'''
         self.assertMinified(original , 'var re=/\d{4}/\ng=10')
 
+    def test_preserve_copyright(self):
+        original = '/*! Copyright blah blah */ var a;'
+        self.assertMinified(original, original)
+
 
 class RegexTests(unittest.TestCase):
 
