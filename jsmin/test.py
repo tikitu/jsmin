@@ -533,7 +533,7 @@ b} and not ${2 * a + "b"}.`'''
         self.assertMinified(original , 'var re=/\d{4}/\ng=10')
 
     def test_preserve_copyright(self):
-        original = '/*! Copyright blah blah */ var a;'
+        original = "/*! Copyright blah blah */\nvar a;"
         self.assertMinified(original, original)
 
 
