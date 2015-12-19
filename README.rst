@@ -79,3 +79,4 @@ Contributors (chronological commit order)
 * https://bitbucket.org/rennat
 * `Nick Alexander <https://bitbucket.org/ncalexan>`_
 * `Gennady Kovshenin <https://github.com/soulseekah>`_
+* `Matt Molyneaux <https://github.com/moggers87>`_
