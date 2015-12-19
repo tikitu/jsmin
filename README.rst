@@ -17,9 +17,14 @@ You can run it as a commandline tool also::
 
   python -m jsmin myfile.js
 
-As yet, ``jsmin`` makes no attempt to be compatible with
+NB: ``jsmin`` makes no attempt to be compatible with
 `ECMAScript 6 / ES.next / Harmony <http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts>`_.
-If you're using it on Harmony code, though, you might find the ``quote_chars``
+The current maintainer does not intend to add ES6-compatibility. If you would
+like to take over maintenance and update ``jsmin`` for ES6, please contact
+`Tikitu de Jager <mailto:tikitu+jsmin@logophile.org>`_. Pull requests are also
+welcome, of course, but my time to review them is somewhat limited these days.
+
+If you're using ``jsmin`` on ES6 code, though, you might find the ``quote_chars``
 parameter useful:
 
 .. code:: python
