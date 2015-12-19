@@ -234,9 +234,18 @@ class JavascriptMinify(object):
         # Skip past first /* and avoid catching on /*/...*/
         next1 = read(1)
         next2 = read(1)
+
+        comment_buffer = '/*'
         while next1 != '*' or next2 != '/':
+            comment_buffer += next1
             next1 = next2
             next2 = read(1)
+
+        if comment_buffer.startswith("/*!"):
+            # comment needs preserving
+            self.outs.write(comment_buffer)
+            self.outs.write("*/\n")
+
 
     def newline(self, previous_non_space, next2, do_newline):
         read = self.ins.read

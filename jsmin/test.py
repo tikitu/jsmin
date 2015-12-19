@@ -532,6 +532,27 @@ b} and not ${2 * a + "b"}.`'''
             g = 10'''
         self.assertMinified(original , 'var re=/\d{4}/\ng=10')
 
+    def test_preserve_copyright(self):
+        original = '''
+            function this() {
+                /*! Copyright year person */
+                console.log('hello!');
+            }
+
+            /*! Copyright blah blah
+             *
+             *  Some other text
+             */
+
+            var a;
+        '''
+        expected = """function this(){/*! Copyright year person */
+console.log('hello!');}/*! Copyright blah blah
+             *
+             *  Some other text
+             */\n\nvar a;"""
+        self.assertMinified(original, expected)
+
 
 class RegexTests(unittest.TestCase):
 
