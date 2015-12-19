@@ -1,6 +1,14 @@
 Changelog
 =========
 
+v2.2.0 (2015-12-19) Tikitu de Jager
+-----------------------------------
+
+- Merge #13: Preserve "loud comments" starting with `/*!`
+
+  These are commonly used for copyright notices, and are preserved by various
+  other minifiers (e.g. YUI Compressor).
+
 v2.1.6 (2015-10-14) Tikitu de Jager
 -----------------------------------
 
