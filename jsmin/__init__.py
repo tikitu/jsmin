@@ -85,6 +85,7 @@ class JavascriptMinify(object):
                 self.is_return = self.return_buf == 'return'
             else:
                 self.return_buf = ''
+                self.is_return = self.is_return and char < '!'
             self.outs.write(char)
             if self.is_return:
                 self.return_buf = ''
@@ -200,7 +201,7 @@ class JavascriptMinify(object):
         write('/')
 
         next = next2
-        while next != '/' or in_char_class:
+        while next and (next != '/' or in_char_class):
             write(next)
             if next == '\\':
                 write(read(1))  # whatever is next is escaped
