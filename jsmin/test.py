@@ -553,6 +553,10 @@ console.log('hello!');}/*! Copyright blah blah
              */\n\nvar a;"""
         self.assertMinified(original, expected)
 
+    def test_issue_14(self):
+        original = 'return x / 1;'
+        self.assertMinified(original, 'return x/1;')
+        
 
 class RegexTests(unittest.TestCase):
 
