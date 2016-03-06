@@ -557,6 +557,10 @@ console.log('hello!');}/*! Copyright blah blah
         original = 'return x / 1;'
         self.assertMinified(original, 'return x/1;')
         
+    def test_issue_14_with_char_from_return(self):
+        original = 'return r / 1;'
+        self.assertMinified(original, 'return r/1;')
+
 
 class RegexTests(unittest.TestCase):
 
