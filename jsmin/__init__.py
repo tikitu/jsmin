@@ -85,6 +85,7 @@ class JavascriptMinify(object):
                 self.is_return = self.return_buf == 'return'
             else:
                 self.return_buf = ''
+                self.is_return = self.is_return and char < '!'
             self.outs.write(char)
             if self.is_return:
                 self.return_buf = ''
