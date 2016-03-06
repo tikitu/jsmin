@@ -200,7 +200,7 @@ class JavascriptMinify(object):
         write('/')
 
         next = next2
-        while next != '/' or in_char_class:
+        while next and (next != '/' or in_char_class):
             write(next)
             if next == '\\':
                 write(read(1))  # whatever is next is escaped
