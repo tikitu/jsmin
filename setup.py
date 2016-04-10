@@ -26,7 +26,7 @@ setup(
     maintainer_email='tikitu+jsmin@logophile.org',
     test_suite='jsmin.test',
     license='MIT License',
-    url='https://bitbucket.org/dcs/jsmin/',
+    url='https://github.com/tikitu/jsmin/',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
