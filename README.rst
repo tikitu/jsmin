@@ -85,3 +85,4 @@ Contributors (chronological commit order)
 * `Nick Alexander <https://bitbucket.org/ncalexan>`_
 * `Gennady Kovshenin <https://github.com/soulseekah>`_
 * `Matt Molyneaux <https://github.com/moggers87>`_
+* `Albert Wang <https://github.com/albertyw>`_
