@@ -1,3 +1,5 @@
+# vim: set fileencoding=utf-8 :
+
 # This code is original from jsmin by Douglas Crockford, it was translated to
 # Python by Baruch Even. It was rewritten by Dave St.Germain for speed.
 #
