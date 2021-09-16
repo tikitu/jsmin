@@ -41,6 +41,12 @@ Where to get it
 * get the latest release `from latest-release on github <https://github.com/tikitu/jsmin/tree/latest-release/jsmin>`_
 * get the development version `from master on github <https://github.com/tikitu/jsmin/>`_
 
+
+Python 2 support removed
+========================
+
+Python 2 support was removed in version 3.0.0. If you need to support Python 2, please use version 2.2.2 with setuptools<58.
+
 Contributing
 ============
 
@@ -60,7 +66,7 @@ Build/test status
 
 Both branches are tested with Travis: https://travis-ci.org/tikitu/jsmin
 
-The `latest-release` branch (the version on PyPI plus any new tests) is tested against CPython 2.6, 2.7, 3.2, and 3.3.
+The `latest-release` branch (the version on PyPI plus any new tests) is tested against CPython 3.
 Currently:
 
 .. image:: https://travis-ci.org/tikitu/jsmin.png?branch=latest-release
@@ -68,8 +74,8 @@ Currently:
 If that branch is failing that means there's a new test that fails on *the latest released version on pypi*, with no fix yet
 released.
 
-The `master` branch (development version, might be ahead of latest released version) is tested against CPython 2.6, 2.7, 3.2, and
-3.3. Currently:
+The `master` branch (development version, might be ahead of latest released version) is tested against CPython 3.
+Currently:
 
 .. image:: https://travis-ci.org/tikitu/jsmin.png?branch=master
 
@@ -86,3 +92,4 @@ Contributors (chronological commit order)
 * `Gennady Kovshenin <https://github.com/soulseekah>`_
 * `Matt Molyneaux <https://github.com/moggers87>`_
 * `Albert Wang <https://github.com/albertyw>`_
+* `Ben Bradshaw <https://github.com/serenecloud>`_
