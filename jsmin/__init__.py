@@ -28,19 +28,18 @@
 
 import io
 import string
-from typing import Optional
+from typing import Tuple, Optional, TextIO
 
 __all__ = ["jsmin", "JavascriptMinify"]
 __version__ = "3.1.0"
 
 
-def jsmin(js, **kwargs):
+def jsmin(js: str, **kwargs):
     """
     returns a minified version of the javascript string
     """
-    klass = io.StringIO
-    ins = klass(js)
-    outs = klass()
+    ins = io.StringIO(js)
+    outs = io.StringIO()
     JavascriptMinify(ins, outs, **kwargs).minify()
     return outs.getvalue()
 
@@ -53,8 +52,8 @@ class JavascriptMinify(object):
 
     def __init__(
         self,
-        instream: Optional[io.StringIO] = None,
-        outstream: Optional[io.StringIO] = None,
+        instream: Optional[TextIO] = None,
+        outstream: Optional[TextIO] = None,
         quote_chars: str = "'\"",
     ):
         self.ins = instream
@@ -71,9 +70,16 @@ class JavascriptMinify(object):
         self.quote_chars = quote_chars
         self.space_strings = space_strings
 
-    def minify(self, instream=None, outstream=None):
+    def minify(
+        self,
+        instream: Optional[TextIO] = None,
+        outstream: Optional[TextIO] = None,
+    ):
         if instream and outstream:
             self.ins, self.outs = instream, outstream
+
+        assert self.ins, "No input stream"
+        assert self.outs, "No output stream"
 
         self.is_return = False
         self.return_buf = ""
@@ -119,7 +125,7 @@ class JavascriptMinify(object):
                         in_quote = ""
                         write("".join(quote_buf))
             elif next1 in "\r\n":
-                next2, do_newline = self.newline(previous_non_space, next2, do_newline)
+                next2, do_newline = self._newline(previous_non_space, next2, do_newline)
             elif next1 < "!":
                 if (
                     previous_non_space in self.space_strings or previous_non_space > "~"
@@ -136,20 +142,20 @@ class JavascriptMinify(object):
                     write(" ")
                 if next2 == "/":
                     # Line comment: treat it as a newline, but skip it
-                    next2 = self.line_comment(next1, next2)
+                    next2 = self._line_comment(next1, next2)
                     next1 = "\n"
-                    next2, do_newline = self.newline(
+                    next2, do_newline = self._newline(
                         previous_non_space, next2, do_newline
                     )
                 elif next2 == "*":
-                    self.block_comment(next1, next2)
+                    self._block_comment(next1, next2)
                     next2 = read(1)
                     if previous_non_space in self.space_strings:
                         do_space = True
                     next1 = previous
                 else:
                     if previous_non_space in "{(,=:[?!&|;" or self.is_return:
-                        self.regex_literal(next1, next2)
+                        self._regex_literal(next1, next2)
                         # hackish: after regex literal next1 is still /
                         # (it was the initial /, now it's the last /)
                         next2 = read(1)
@@ -180,8 +186,10 @@ class JavascriptMinify(object):
             previous = next1
             next1 = next2
 
-    def regex_literal(self, next1, next2):
-        assert next1 == "/"  # otherwise we should not be called!
+    def _regex_literal(self, next1: str, next2: str) -> None:
+        assert next1 == "/"
+        assert self.ins
+        assert self.outs
 
         self.return_buf = ""
 
@@ -206,8 +214,9 @@ class JavascriptMinify(object):
 
         write("/")
 
-    def line_comment(self, next1, next2):
+    def _line_comment(self, next1: str, next2: str) -> str:
         assert next1 == next2 == "/"
+        assert self.ins, "No input stream"
 
         read = self.ins.read
 
@@ -218,9 +227,11 @@ class JavascriptMinify(object):
 
         return next1
 
-    def block_comment(self, next1, next2):
+    def _block_comment(self, next1: str, next2: str) -> None:
         assert next1 == "/"
         assert next2 == "*"
+        assert self.ins, "No input stream"
+        assert self.outs, "No output stream"
 
         read = self.ins.read
 
@@ -239,7 +250,10 @@ class JavascriptMinify(object):
             self.outs.write(comment_buffer)
             self.outs.write("*/\n")
 
-    def newline(self, previous_non_space, next2, do_newline):
+    def _newline(
+        self, previous_non_space: str, next2: str, do_newline: bool
+    ) -> Tuple[str, bool]:
+        assert self.ins, "No input stream"
         read = self.ins.read
 
         if (

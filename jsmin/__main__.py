@@ -25,7 +25,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import sys, os, glob
+# import sys, os, glob
+import sys
 from jsmin import JavascriptMinify
 
 for f in sys.argv[1:]:

@@ -602,10 +602,9 @@ console.log('hello!');}/*! Copyright blah blah
 
 class RegexTests(unittest.TestCase):
     def regex_recognise(self, js):
-        klass = jsmin.io.StringIO
-        ins = klass(js[2:])
-        outs = klass()
-        jsmin.JavascriptMinify(ins, outs).regex_literal(js[0], js[1])
+        ins = jsmin.io.StringIO(js[2:])
+        outs = jsmin.io.StringIO()
+        jsmin.JavascriptMinify(ins, outs)._regex_literal(js[0], js[1])
         return outs.getvalue()
 
     def assert_regex(self, js_input, expected):
