@@ -342,7 +342,7 @@ var  foo    =  "hey";
 
     def testSingleComment2(self):
         self.assertMinified(
-            'x.replace(/\//, "_")// slash to underscore', 'x.replace(/\//,"_")'
+            'x.replace(/\\//, "_")// slash to underscore', 'x.replace(/\\//,"_")'
         )
 
     def testSlashesNearComments(self):
@@ -392,8 +392,8 @@ var  foo    =  "hey";
         self.assertMinified(original, original)
 
     def test_brackets_around_slashed_regex(self):
-        original = 'function a() { /\//.test("a") }'
-        expected = 'function a(){/\//.test("a")}'
+        original = 'function a() { /\\//.test("a") }'
+        expected = 'function a(){/\\//.test("a")}'
         self.assertMinified(original, expected)
 
     def test_angular_1(self):
@@ -464,11 +464,11 @@ b} and not ${2 * a + "b"}.`"""
     def test_issue_bitbucket_16(self):
         original = """
             f = function() {
-                return /DataTree\/(.*)\//.exec(this._url)[1];
+                return /DataTree\\/(.*)\\//.exec(this._url)[1];
             }
         """
         self.assertMinified(
-            original, "f=function(){return /DataTree\/(.*)\//.exec(this._url)[1];}"
+            original, "f=function(){return /DataTree\\/(.*)\\//.exec(this._url)[1];}"
         )
 
     def test_issue_bitbucket_17(self):
@@ -478,7 +478,7 @@ b} and not ${2 * a + "b"}.`"""
     def test_issue_6(self):
         original = """
             respond.regex = {
-                comments: /\/\*[^*]*\*+([^/][^*]*\*+)*\//gi,
+                comments: /\\/\\*[^*]*\\*+([^/][^*]*\\*+)*\\//gi,
                 urls: 'whatever'
             };
         """
@@ -560,15 +560,15 @@ b} and not ${2 * a + "b"}.`"""
 
     def test_issue_12_re_nl_if(self):
         original = """
-            var re = /\d{4}/
+            var re = /\\d{4}/
             if (1) { console.log(2); }"""
-        self.assertMinified(original, "var re=/\d{4}/\nif(1){console.log(2);}")
+        self.assertMinified(original, "var re=/\\d{4}/\nif(1){console.log(2);}")
 
     def test_issue_12_re_nl_other(self):
         original = """
-            var re = /\d{4}/
+            var re = /\\d{4}/
             g = 10"""
-        self.assertMinified(original, "var re=/\d{4}/\ng=10")
+        self.assertMinified(original, "var re=/\\d{4}/\ng=10")
 
     def test_preserve_copyright(self):
         original = """

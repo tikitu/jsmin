@@ -242,8 +242,10 @@ class JavascriptMinify(object):
     def newline(self, previous_non_space, next2, do_newline):
         read = self.ins.read
 
-        if previous_non_space and (
-            previous_non_space in self.newline_end_strings or previous_non_space > "~"
+        if (
+            previous_non_space
+            and previous_non_space in self.newline_end_strings
+            or previous_non_space > "~"
         ):
             while True:
                 if next2 < "!":
