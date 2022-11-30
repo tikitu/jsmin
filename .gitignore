@@ -6,3 +6,6 @@ include/
 __pycache__
 *.pyc
 lib/
+.pytest_cache
+.mypy_cache
+.DS_Store
