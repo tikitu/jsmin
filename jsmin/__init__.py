@@ -35,9 +35,7 @@ __version__ = "3.1.0"
 
 
 def jsmin(js: str, **kwargs):
-    """
-    returns a minified version of the javascript string
-    """
+    """Minify a javascript string"""
     ins = io.StringIO(js)
     outs = io.StringIO()
     JavascriptMinify(ins, outs, **kwargs).minify()
@@ -45,36 +43,31 @@ def jsmin(js: str, **kwargs):
 
 
 class JavascriptMinify(object):
-    """
-    Minify an input stream of javascript, writing
-    to an output stream
-    """
-
     def __init__(
         self,
         instream: Optional[TextIO] = None,
         outstream: Optional[TextIO] = None,
         quote_chars: str = "'\"",
     ):
-        self.ins = instream
-        self.outs = outstream
+        self.ins, self.outs = instream, outstream
 
-        space_strings = string.ascii_letters + string.digits + "_$\\"
+        space_chars = string.ascii_letters + string.digits + "_$\\"
         starters = "{[(+-"
         enders = "}])+-/" + quote_chars
-        newline_start_strings = starters + space_strings + quote_chars
-        newline_end_strings = enders + space_strings + quote_chars
+        newline_start_chars = starters + space_chars + quote_chars
+        newline_end_chars = enders + space_chars + quote_chars
 
-        self.newline_start_strings = newline_start_strings
-        self.newline_end_strings = newline_end_strings
+        self.newline_start_chars = newline_start_chars
+        self.newline_end_chars = newline_end_chars
         self.quote_chars = quote_chars
-        self.space_strings = space_strings
+        self.space_chars = space_chars
 
     def minify(
         self,
         instream: Optional[TextIO] = None,
         outstream: Optional[TextIO] = None,
     ):
+        """Minify an input stream of javascript, writing to an output stream"""
         if instream and outstream:
             self.ins, self.outs = instream, outstream
 
@@ -84,7 +77,7 @@ class JavascriptMinify(object):
         self.is_return = False
         self.return_buf = ""
 
-        def write(char):
+        def write(char: str) -> None:
             # all of this is to support literal regular expressions.
             # sigh
             if char in "return":
@@ -93,7 +86,7 @@ class JavascriptMinify(object):
             else:
                 self.return_buf = ""
                 self.is_return = self.is_return and char < "!"
-            self.outs.write(char)
+            self.outs.write(char)  # type: ignore
             if self.is_return:
                 self.return_buf = ""
 
@@ -128,8 +121,8 @@ class JavascriptMinify(object):
                 next2, do_newline = self._newline(previous_non_space, next2, do_newline)
             elif next1 < "!":
                 if (
-                    previous_non_space in self.space_strings or previous_non_space > "~"
-                ) and (next2 in self.space_strings or next2 > "~"):
+                    previous_non_space in self.space_chars or previous_non_space > "~"
+                ) and (next2 in self.space_chars or next2 > "~"):
                     do_space = True
                 elif previous_non_space in "-+" and next2 == previous_non_space:
                     # protect against + ++ or - -- sequences
@@ -150,7 +143,7 @@ class JavascriptMinify(object):
                 elif next2 == "*":
                     self._block_comment(next1, next2)
                     next2 = read(1)
-                    if previous_non_space in self.space_strings:
+                    if previous_non_space in self.space_chars:
                         do_space = True
                     next1 = previous
                 else:
@@ -258,7 +251,7 @@ class JavascriptMinify(object):
 
         if (
             previous_non_space
-            and previous_non_space in self.newline_end_strings
+            and previous_non_space in self.newline_end_chars
             or previous_non_space > "~"
         ):
             while True:
@@ -267,11 +260,7 @@ class JavascriptMinify(object):
                     if not next2:
                         break
                 else:
-                    if (
-                        next2 in self.newline_start_strings
-                        or next2 > "~"
-                        or next2 == "/"
-                    ):
+                    if next2 in self.newline_start_chars or next2 > "~" or next2 == "/":
                         do_newline = True
                     break
 
