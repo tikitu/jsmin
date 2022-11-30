@@ -27,9 +27,10 @@
 
 
 import io
-
+import string
+from typing import Optional
 __all__ = ['jsmin', 'JavascriptMinify']
-__version__ = '3.0.1'
+__version__ = '3.1.0'
 
 
 def jsmin(js, **kwargs):
@@ -49,10 +50,25 @@ class JavascriptMinify(object):
     to an output stream
     """
 
-    def __init__(self, instream=None, outstream=None, quote_chars="'\""):
+    def __init__(
+        self,
+        instream: Optional[io.StringIO] = None,
+        outstream:  Optional[io.StringIO] = None,
+        quote_chars: str ="'\"",
+    ):
         self.ins = instream
         self.outs = outstream
+
+        space_strings = string.ascii_letters + string.digits + "_$\\"
+        starters = '{[(+-'
+        enders = '}])+-/' + quote_chars
+        newline_start_strings = starters + space_strings + quote_chars
+        newline_end_strings = enders + space_strings + quote_chars
+
+        self.newline_start_strings = newline_start_strings
+        self.newline_end_strings = newline_end_strings
         self.quote_chars = quote_chars
+        self.space_strings = space_strings
 
     def minify(self, instream=None, outstream=None):
         if instream and outstream:
@@ -75,15 +91,6 @@ class JavascriptMinify(object):
                 self.return_buf = ''
 
         read = self.ins.read
-
-        space_strings = "abcdefghijklmnopqrstuvwxyz"\
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$\\"
-        self.space_strings = space_strings
-        starters, enders = '{[(+-', '}])+-/' + self.quote_chars
-        newlinestart_strings = starters + space_strings + self.quote_chars
-        newlineend_strings = enders + space_strings + self.quote_chars
-        self.newlinestart_strings = newlinestart_strings
-        self.newlineend_strings = newlineend_strings
 
         do_newline = False
         do_space = False
@@ -114,9 +121,9 @@ class JavascriptMinify(object):
                 next2, do_newline = self.newline(
                     previous_non_space, next2, do_newline)
             elif next1 < '!':
-                if (previous_non_space in space_strings \
+                if (previous_non_space in self.space_strings \
                     or previous_non_space > '~') \
-                    and (next2 in space_strings or next2 > '~'):
+                    and (next2 in self.space_strings or next2 > '~'):
                     do_space = True
                 elif previous_non_space in '-+' and next2 == previous_non_space:
                     # protect against + ++ or - -- sequences
@@ -136,7 +143,7 @@ class JavascriptMinify(object):
                 elif next2 == '*':
                     self.block_comment(next1, next2)
                     next2 = read(1)
-                    if previous_non_space in space_strings:
+                    if previous_non_space in self.space_strings:
                         do_space = True
                     next1 = previous
                 else:
@@ -184,17 +191,17 @@ class JavascriptMinify(object):
 
         write('/')
 
-        next = next2
-        while next and (next != '/' or in_char_class):
-            write(next)
-            if next == '\\':
+        _next = next2
+        while _next and (_next != '/' or in_char_class):
+            write(_next)
+            if _next == '\\':
                 write(read(1))  # whatever is next is escaped
-            elif next == '[':
+            elif _next == '[':
                 write(read(1))  # character class cannot be empty
                 in_char_class = True
-            elif next == ']':
+            elif _next == ']':
                 in_char_class = False
-            next = read(1)
+            _next = read(1)
 
         write('/')
 
@@ -236,15 +243,15 @@ class JavascriptMinify(object):
         read = self.ins.read
 
         if previous_non_space and (
-                        previous_non_space in self.newlineend_strings
+                        previous_non_space in self.newline_end_strings
                         or previous_non_space > '~'):
-            while 1:
+            while True:
                 if next2 < '!':
                     next2 = read(1)
                     if not next2:
                         break
                 else:
-                    if next2 in self.newlinestart_strings \
+                    if next2 in self.newline_start_strings \
                             or next2 > '~' or next2 == '/':
                         do_newline = True
                     break
